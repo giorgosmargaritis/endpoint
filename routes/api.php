@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,4 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/google', function (Request $request) {
     return 'Hello';
+});
+
+Route::post('/google', function (Request $request) {
+    Log::info($request->json());
+    return response('ok', 200);
 });
