@@ -24,6 +24,6 @@ Route::get('/google', function (Request $request) {
 });
 
 Route::post('/google', function (Request $request) {
-    Log::info($request->json());
+    Log::info($request->all());
     return response('ok', 200);
 });
