@@ -22,5 +22,5 @@ Route::get('/', function (Request $request) {
 
 Route::post('/google', function (Request $request) {
     Log::info($request->all());
-    return response('ok', 200);
+    http_response_code(200);
 });
