@@ -19,3 +19,8 @@ Route::get('/', function (Request $request) {
     Log::info($request->all());
     return view('welcome', [], ['200']);
 });
+
+Route::post('/google', function (Request $request) {
+    Log::info($request->all());
+    return response('ok', 200);
+});
