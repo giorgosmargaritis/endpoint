@@ -11,6 +11,16 @@ class Log extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $filable = [
+        'data',
+        'endpoint_id',
+    ];
+
     public function endpoint(): BelongsTo
     {
         return $this->belongsTo(Endpoint::class);
