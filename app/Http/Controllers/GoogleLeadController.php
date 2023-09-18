@@ -11,7 +11,9 @@ class GoogleLeadController extends Controller
     {
         $data = json_decode($request->getContent());
 
-        Log::info($data);
+        $logMessage = print_r($data, true);
+
+        Log::info($logMessage);
 
         return response()->json(['status' => 'success']);
     }
