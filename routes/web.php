@@ -16,11 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (Request $request) {
-    Log::info($request->all());
-    return view('welcome', [], ['200']);
-});
-
-Route::post('/google', function (Request $request) {
-    Log::info($request->all());
-    http_response_code(200);
+    return view('welcome');
 });

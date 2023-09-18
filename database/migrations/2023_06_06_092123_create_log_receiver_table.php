@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('log_id')->constrained()->onDelete('cascade');
             $table->foreignId('receiver_id')->constrained()->onDelete('cascade');
             $table->unique(['log_id', 'receiver_id']);
-            $table->boolean('send_status');
+            $table->boolean('status');
             $table->timestamps();
 
         });
