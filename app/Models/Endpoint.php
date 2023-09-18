@@ -15,7 +15,7 @@ class Endpoint extends Model
      *
      * @var string[]
      */
-    protected $filable = [
+    protected $fillable = [
         'name',
         'verification_token',
     ];

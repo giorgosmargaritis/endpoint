@@ -16,7 +16,7 @@ class Log extends Model
      *
      * @var string[]
      */
-    protected $filable = [
+    protected $fillable = [
         'data',
         'endpoint_id',
     ];
