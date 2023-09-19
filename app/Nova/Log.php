@@ -2,8 +2,9 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Log extends Resource
@@ -41,6 +42,7 @@ class Log extends Resource
     {
         return [
             ID::make()->sortable(),
+            Text::make('Data', 'data')->readonly(),
         ];
     }
 
