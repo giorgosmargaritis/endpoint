@@ -2,21 +2,18 @@
 
 namespace App\Nova;
 
-use Illuminate\Support\Str;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Endpoint extends Resource
+class Log extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Endpoint>
+     * @var class-string<\App\Models\Log>
      */
-    public static $model = \App\Models\Endpoint::class;
+    public static $model = \App\Models\Log::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -44,15 +41,6 @@ class Endpoint extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            Text::make('Token', 'verification_token')
-                ->default(Str::random(20))
-                ->maxlength(20)
-                ->enforceMaxlength()
-                ->rules('required')
-                ->creationRules('unique:endpoints,verification_token')
-                ->hideWhenUpdating(),
-            HasMany::make('Logs'),
         ];
     }
 
