@@ -42,7 +42,7 @@ class Log extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Data', 'data')->readonly(),
+            Text::make('Data', 'data')->readonly()->showOnDetail(),
         ];
     }
 
