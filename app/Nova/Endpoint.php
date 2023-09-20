@@ -61,7 +61,8 @@ class Endpoint extends Resource
                 ->creationRules('unique:endpoints,verification_token')
                 ->hideWhenUpdating(),
                 
-            HasMany::make('Logs', 'logs'),
+            HasMany::make('Logs', 'logs')
+                ->showOnDetail(),
         ];
     }
 
