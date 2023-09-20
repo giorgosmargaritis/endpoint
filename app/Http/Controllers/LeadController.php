@@ -14,6 +14,8 @@ class LeadController extends Controller
         $data = json_decode($request->getContent());
         $verification_token = $data->google_key ?? null;
 
+        Log::info($endpoint);
+
         if($verification_token !== $endpoint->verification_token)
         {
             return response('Wrong verification token', 403);
