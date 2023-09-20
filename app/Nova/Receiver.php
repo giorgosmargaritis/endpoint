@@ -47,7 +47,7 @@ class Receiver extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
-            URL::make('URL', 'url')->rules('required'),
+            Text::make('URL', 'url')->rules('required'),
             BelongsTo::make('Endpoint', 'endpoint'),
             BelongsToMany::make('Logs')
                 ->fields(function ($request, $relatedModel) {
