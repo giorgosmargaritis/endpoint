@@ -48,7 +48,7 @@ class Receiver extends Resource
             Text::make('Name', 'name')->rules('required'),
             URL::make('URL', 'url')->rules('required'),
             BelongsTo::make('Endpoint', 'endpoint'),
-            BelongsToMany::make('Log', 'log'),
+            BelongsToMany::make('Logs'),
         ];
     }
 
