@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -52,10 +53,8 @@ class Receiver extends Resource
             BelongsToMany::make('Logs')
                 ->fields(function ($request, $relatedModel) {
                     return [
-                        Select::make('Status', 'status')->options([
-                            '1' => 'Pass',
-                            '2' => 'Fail',
-                        ])->displayUsingLabels(),
+                        Text::make('Status'),
+                        DateTime::make('Created At'),
                     ];
                 }),
         ];
