@@ -53,8 +53,8 @@ class Receiver extends Resource
                 ->fields(function ($request, $relatedModel) {
                     return [
                         Select::make('Status', 'status')->options([
-                            1 => 'Pass',
-                            2 => 'Fail',
+                            '1' => 'Pass',
+                            '2' => 'Fail',
                         ])->displayUsingLabels(),
                     ];
                 }),
