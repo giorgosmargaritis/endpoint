@@ -28,6 +28,6 @@ class Receiver extends Model
 
     public function logs(): BelongsToMany
     {
-        return $this->belongsToMany(Log::class);
+        return $this->belongsToMany(Log::class)->withPivot('status')->withTimestamps();
     }
 }
