@@ -51,7 +51,7 @@ class Receiver extends Resource
             BelongsToMany::make('Logs')
                 ->fields(function ($request, $relatedModel) {
                     return [
-                        Text::make('Status', 'status'),
+                        ID::make('Status', 'status'),
                     ];
                 }),
         ];
