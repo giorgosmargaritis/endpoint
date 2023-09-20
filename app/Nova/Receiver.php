@@ -53,8 +53,8 @@ class Receiver extends Resource
             BelongsToMany::make('Logs')
                 ->fields(function ($request, $relatedModel) {
                     return [
-                        Text::make('Status'),
-                        DateTime::make('Created At'),
+                        Text::make('Status', 'status'),
+                        DateTime::make('Created At', 'created_at'),
                     ];
                 }),
         ];
