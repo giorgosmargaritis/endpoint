@@ -45,8 +45,14 @@ class Endpoint extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            Text::make('Webhook Path', 'path')->rules('required'),
+
+            Text::make('Name', 'name')
+                ->rules('required'),
+
+            Text::make('Webhook Path', 'path')
+                ->rules('required')
+                ->creationRules('unique:endpoints,path'),
+
             Text::make('Token', 'verification_token')
                 ->default(Str::random(20))
                 ->maxlength(20)
@@ -54,6 +60,7 @@ class Endpoint extends Resource
                 ->rules('required')
                 ->creationRules('unique:endpoints,verification_token')
                 ->hideWhenUpdating(),
+                
             HasMany::make('Logs', 'logs'),
         ];
     }
