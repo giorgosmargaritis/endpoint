@@ -45,6 +45,7 @@ class Endpoint extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
+            Text::make('Webhook Path', 'path')->rules('required'),
             Text::make('Token', 'verification_token')
                 ->default(Str::random(20))
                 ->maxlength(20)

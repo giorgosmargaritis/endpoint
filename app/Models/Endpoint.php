@@ -17,6 +17,7 @@ class Endpoint extends Model
      */
     protected $fillable = [
         'name',
+        'path',
         'verification_token',
     ];
 

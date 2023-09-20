@@ -7,14 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Log as Logmodel;
 use Illuminate\Support\Facades\Log;
 
-class GoogleLeadController extends Controller
+class LeadController extends Controller
 {
-    public function webhook(Request $request)
+    public function store(Endpoint $endpoint, Request $request)
     {
         $data = json_decode($request->getContent());
         $verification_token = $data->google_key ?? null;
 
-        $endpoint = Endpoint::where('verification_token', '=', $verification_token)->firstOrFail();
+        if($verification_token !== $endpoint->verification_token)
+        {
+            return response('Wrong verification token', 403);
+        }
 
         $logMessage = print_r($data, true);
 

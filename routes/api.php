@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GoogleLeadController;
+use App\Http\Controllers\LeadController;
+use App\Models\Endpoint;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/webhook/{endpoint:path}', [LeadController::class, 'store']);
+
 Route::get('/google', function (Request $request) {
     return 'Hello';
 });
-
-Route::post('/google/webhook', [GoogleLeadController::class, 'webhook']);
 
 Route::get('/facebook', function (Request $request) {
     

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('endpoints', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
+            $table->string('path')->unique();
             $table->string('verification_token', 20)->unique();
             $table->timestamps();
         });
