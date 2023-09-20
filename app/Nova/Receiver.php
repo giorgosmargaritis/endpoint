@@ -48,7 +48,12 @@ class Receiver extends Resource
             Text::make('Name', 'name')->rules('required'),
             URL::make('URL', 'url')->rules('required'),
             BelongsTo::make('Endpoint', 'endpoint'),
-            BelongsToMany::make('Logs'),
+            BelongsToMany::make('Logs')
+                ->fields(function ($request, $relatedModel) {
+                    return [
+                        Text::make('Status', 'status'),
+                    ];
+                }),
         ];
     }
 
