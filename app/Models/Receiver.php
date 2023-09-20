@@ -11,6 +11,16 @@ class Receiver extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'name',
+        'url',
+    ];
+
     public function endpoint(): BelongsTo
     {
         return $this->belongsTo(Endpoint::class);

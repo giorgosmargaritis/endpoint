@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('receivers', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
             $table->string('url');
             $table->bigInteger('endpoint_id')->unsigned();
             $table->timestamps();

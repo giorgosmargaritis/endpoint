@@ -2,21 +2,22 @@
 
 namespace App\Nova;
 
-use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Endpoint extends Resource
+class Receiver extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Endpoint>
+     * @var class-string<\App\Models\Receiver>
      */
-    public static $model = \App\Models\Endpoint::class;
+    public static $model = \App\Models\Receiver::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -32,7 +33,6 @@ class Endpoint extends Resource
      */
     public static $search = [
         'id',
-        'logs'
     ];
 
     /**
@@ -46,15 +46,9 @@ class Endpoint extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
-            Text::make('Webhook Path', 'path')->rules('required'),
-            Text::make('Token', 'verification_token')
-                ->default(Str::random(20))
-                ->maxlength(20)
-                ->enforceMaxlength()
-                ->rules('required')
-                ->creationRules('unique:endpoints,verification_token')
-                ->hideWhenUpdating(),
-            HasMany::make('Logs', 'logs'),
+            URL::make('URL', 'url')->rules('required'),
+            BelongsTo::make('Endpoint', 'endpoint'),
+            BelongsToMany::make('Logs', 'log'),
         ];
     }
 
