@@ -29,10 +29,10 @@ class LeadController extends Controller
             return response('No receivers set', 403);
         }
 
-        // if($verification_token !== $endpoint->verification_token)
-        // {
-        //     return response('Wrong verification token', 403);
-        // }
+        if($verification_token !== $endpoint->verification_token)
+        {
+            return response('Wrong verification token', 403);
+        }
 
         $logMessage = print_r($data, true);
 
