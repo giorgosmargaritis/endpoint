@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('url');
             $table->bigInteger('endpoint_id')->unsigned();
+            $table->bigInteger('authenticationmethod_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('endpoint_id')->references('id')->on('endpoints')->onDelete('cascade');
+            $table->foreign('authenticationmethod_id')->references('id')->on('authentication_methods')->onDelete('cascade');
         });
     }
 

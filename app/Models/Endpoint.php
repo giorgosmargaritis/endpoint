@@ -21,6 +21,13 @@ class Endpoint extends Model
         'verification_token',
     ];
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    // protected $with = ['receivers'];
+
     public function logs(): HasMany
     {
         return $this->hasMany(Log::class);

@@ -4,23 +4,18 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Receiver extends Resource
+class AuthenticationMethod extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Receiver>
+     * @var class-string<\App\Models\AuthenticationMethod>
      */
-    public static $model = \App\Models\Receiver::class;
+    public static $model = \App\Models\AuthenticationMethod::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,7 +30,7 @@ class Receiver extends Resource
      * @var array
      */
     public static $search = [
-        'logs',
+        'id',
     ];
 
     /**
@@ -48,11 +43,9 @@ class Receiver extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            Text::make('URL', 'url')->rules('required'),
-            BelongsTo::make('Endpoint', 'endpoint'),
-            BelongsTo::make('Authentication Method', 'authenticationmethod'),
-            HasMany::make('Logs', 'logreceivers', 'App\Nova\LogReceiver'),
+            Text::make('Name')->rules('required'),
+            KeyValue::make('Data')
+                ->rules('json'),
         ];
     }
 

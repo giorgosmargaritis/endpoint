@@ -22,10 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/webhook/{endpoint:path}', [LeadController::class, 'store']);
 
-Route::get('/google', function (Request $request) {
-    return 'Hello';
-});
-
-Route::get('/facebook', function (Request $request) {
-    
-});
+Route::get('webhook/{endpoint:path}', [LeadController::class, 'index']);

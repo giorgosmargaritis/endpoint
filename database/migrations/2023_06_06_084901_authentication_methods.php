@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_receiver', function (Blueprint $table) {
+        Schema::create('authentication_methods', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('log_id')->constrained()->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained()->onDelete('cascade');
-            $table->unique(['log_id', 'receiver_id']);
-            $table->boolean('status');
+            $table->text('name');
+            $table->json('data')->nullable(); 
             $table->timestamps();
-
         });
+        
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('log_receiver');
+        Schema::dropIfExists('authentication_methods');
     }
 };

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Receiver extends Model
 {
@@ -26,8 +27,18 @@ class Receiver extends Model
         return $this->belongsTo(Endpoint::class);
     }
 
+    public function authenticationmethod(): BelongsTo
+    {
+        return $this->belongsTo(AuthenticationMethod::class);
+    }
+
     public function logs(): BelongsToMany
     {
         return $this->belongsToMany(Log::class)->withPivot('status')->withTimestamps();
+    }
+
+    public function logreceivers(): HasMany
+    {
+        return $this->hasMany(LogReceiver::class);
     }
 }

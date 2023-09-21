@@ -44,5 +44,9 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
             'role_id' => 1,
         ]);
+
+        \App\Models\AuthenticationMethod::factory()->create([
+            'name' => 'No Auth',
+        ]);
     }
 }

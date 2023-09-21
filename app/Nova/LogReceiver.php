@@ -4,30 +4,36 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\URL;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Receiver extends Resource
+class LogReceiver extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Receiver>
+     * @var class-string<\App\Models\LogReceiver>
      */
-    public static $model = \App\Models\Receiver::class;
+    public static $model = \App\Models\LogReceiver::class;
+
+    /**
+    * Get the value that should be displayed to represent the title of the resource.
+    *
+    * @return string
+    */
+    public static function label() {
+        return 'Logs';
+    }
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
+    
 
     /**
      * The columns that should be searched.
@@ -35,7 +41,7 @@ class Receiver extends Resource
      * @var array
      */
     public static $search = [
-        'logs',
+        'id',
     ];
 
     /**
@@ -48,11 +54,14 @@ class Receiver extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            Text::make('URL', 'url')->rules('required'),
-            BelongsTo::make('Endpoint', 'endpoint'),
-            BelongsTo::make('Authentication Method', 'authenticationmethod'),
-            HasMany::make('Logs', 'logreceivers', 'App\Nova\LogReceiver'),
+
+            BelongsTo::make('Receiver', 'receiver', 'App\Nova\Receiver'),
+
+            Text::make('Status'),
+
+            DateTime::make('Created At', 'created_at'),
+
+            DateTime::make('Updated At', 'updated_at'),
         ];
     }
 
@@ -97,6 +106,8 @@ class Receiver extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new \App\Nova\Actions\ResendLog,
+        ];
     }
 }
