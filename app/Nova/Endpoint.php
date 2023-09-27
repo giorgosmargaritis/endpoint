@@ -64,12 +64,15 @@ class Endpoint extends Resource
                 ->creationRules('unique:endpoints,path'),
 
             Text::make('Token', 'verification_token')
+                ->readonly(function ($request) {
+                    return $request->isUpdateOrUpdateAttachedRequest();
+                })
                 ->default(Str::random(20))
                 ->maxlength(20)
                 ->enforceMaxlength()
                 ->rules('required')
                 ->creationRules('unique:endpoints,verification_token')
-                ->hideWhenUpdating(),
+                // ->hideWhenUpdating(),
                 
             // HasMany::make('Logs', 'logs'),
         ];
