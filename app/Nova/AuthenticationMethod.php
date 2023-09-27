@@ -18,6 +18,15 @@ class AuthenticationMethod extends Resource
     public static $model = \App\Models\AuthenticationMethod::class;
 
     /**
+     * The click action to use when clicking on the resource in the table.
+     *
+     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+     *
+     * @var string
+     */
+    public static $clickAction = 'ignore';
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -30,7 +39,7 @@ class AuthenticationMethod extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
     ];
 
     /**
@@ -43,7 +52,10 @@ class AuthenticationMethod extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')->rules('required'),
+
+            Text::make('Name')
+                ->exceptOnForms(),
+
             KeyValue::make('Data')
                 ->rules('json'),
         ];

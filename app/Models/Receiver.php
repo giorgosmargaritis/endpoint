@@ -34,10 +34,10 @@ class Receiver extends Model
 
     public function logs(): BelongsToMany
     {
-        return $this->belongsToMany(Log::class)->withPivot('status')->withTimestamps();
+        return $this->belongsToMany(Log::class, 'logs_receivers')->withPivot('status')->withTimestamps();
     }
 
-    public function logreceivers(): HasMany
+    public function logsreceivers(): HasMany
     {
         return $this->hasMany(LogReceiver::class);
     }

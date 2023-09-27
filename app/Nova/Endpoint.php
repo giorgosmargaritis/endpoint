@@ -19,6 +19,15 @@ class Endpoint extends Resource
     public static $model = \App\Models\Endpoint::class;
 
     /**
+     * The click action to use when clicking on the resource in the table.
+     *
+     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+     *
+     * @var string
+     */
+    public static $clickAction = 'ignore';
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -31,7 +40,9 @@ class Endpoint extends Resource
      * @var array
      */
     public static $search = [
-        'logs'
+        'name',
+        'path',
+        'verification_token',
     ];
 
     /**
@@ -60,8 +71,7 @@ class Endpoint extends Resource
                 ->creationRules('unique:endpoints,verification_token')
                 ->hideWhenUpdating(),
                 
-            HasMany::make('Logs', 'logs')
-                ->showOnDetail(),
+            // HasMany::make('Logs', 'logs'),
         ];
     }
 

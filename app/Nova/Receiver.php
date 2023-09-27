@@ -6,11 +6,12 @@ use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Fields\Text;
+use App\Nova\LogReceiverFields;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
-use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Receiver extends Resource
@@ -21,6 +22,15 @@ class Receiver extends Resource
      * @var class-string<\App\Models\Receiver>
      */
     public static $model = \App\Models\Receiver::class;
+
+    /**
+     * The click action to use when clicking on the resource in the table.
+     *
+     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+     *
+     * @var string
+     */
+    public static $clickAction = 'ignore';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,7 +45,7 @@ class Receiver extends Resource
      * @var array
      */
     public static $search = [
-        'logs',
+        'name',
     ];
 
     /**
@@ -48,11 +58,16 @@ class Receiver extends Resource
     {
         return [
             ID::make()->sortable(),
+
             Text::make('Name', 'name')->rules('required'),
-            Text::make('URL', 'url')->rules('required'),
+
+            Text::make('URL', 'url')->hideFromIndex()->rules('required'),
+
             BelongsTo::make('Endpoint', 'endpoint'),
+
             BelongsTo::make('Authentication Method', 'authenticationmethod'),
-            HasMany::make('Logs', 'logreceivers', 'App\Nova\LogReceiver'),
+
+            HasMany::make('Logs', 'logsreceivers', 'App\Nova\LogReceiver'),
         ];
     }
 

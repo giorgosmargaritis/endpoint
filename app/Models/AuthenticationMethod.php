@@ -10,6 +10,8 @@ class AuthenticationMethod extends Model
 {
     use HasFactory;
 
+    const TYPE_NOAUTH = 0;
+
     /**
      * The attributes that should be cast.
      *

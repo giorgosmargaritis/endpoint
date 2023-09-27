@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('authentication_methods', function (Blueprint $table) {
+        Schema::create('logs_receivers_attempts', function (Blueprint $table) {
             $table->id();
-            $table->text('name');
-            $table->tinyInteger('type');
-            $table->json('data')->nullable(); 
+            $table->foreignId('logs_receivers_id')->constrained()->onDelete('cascade');
+            $table->text('status_code');
+            $table->longText('response');
             $table->timestamps();
+
         });
-        
     }
 
     /**
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('authentication_methods');
+        Schema::dropIfExists('logs_receivers_attempts');
     }
 };

@@ -2,41 +2,20 @@
 
 namespace App\Nova;
 
-use App\Models\LogReceiver as ModelsLogReceiver;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class LogReceiver extends Resource
+class LogReceiverAttempt extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\LogReceiver>
+     * @var class-string<\App\Models\LogReceiverAttempt>
      */
-    public static $model = \App\Models\LogReceiver::class;
-
-    /**
-     * The click action to use when clicking on the resource in the table.
-     *
-     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
-     *
-     * @var string
-     */
-    public static $clickAction = 'ignore';
-
-    /**
-    * Get the value that should be displayed to represent the title of the resource.
-    *
-    * @return string
-    */
-    public static function label() {
-        return 'Logs';
-    }
+    public static $model = \App\Models\LogReceiverAttempt::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -44,7 +23,6 @@ class LogReceiver extends Resource
      * @var string
      */
     public static $title = 'id';
-    
 
     /**
      * The columns that should be searched.
@@ -65,16 +43,8 @@ class LogReceiver extends Resource
     {
         return [
             ID::make()->sortable(),
-
-            BelongsTo::make('Receiver', 'receiver', 'App\Nova\Receiver')
-                ->filterable()
-                ->exceptOnForms(),
-
-            Text::make('Status')
-                ->filterable()
-                ->exceptOnForms(),
-
-            HasMany::make('Attempts', 'logsreceiversattempts', 'App\Nova\LogReceiverAttempt'),
+            Text::make('Response'),
+            DateTime::make('Created At'),
 
         ];
     }
@@ -120,14 +90,6 @@ class LogReceiver extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [
-            (new \App\Nova\Actions\SendLog)
-                ->canSee(function ($request) {
-                    if($this->model()->status !== ModelsLogReceiver::STATUS_SUCCESS)
-                    {
-                        return true;
-                    }
-                }),
-        ];
+        return [];
     }
 }

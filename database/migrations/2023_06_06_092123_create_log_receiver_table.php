@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('log_receiver', function (Blueprint $table) {
+        Schema::create('logs_receivers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('log_id')->constrained()->onDelete('cascade');
             $table->foreignId('receiver_id')->constrained()->onDelete('cascade');

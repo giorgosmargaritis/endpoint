@@ -94,6 +94,8 @@ class Log extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            new \App\Nova\Actions\SendLog,
+        ];
     }
 }

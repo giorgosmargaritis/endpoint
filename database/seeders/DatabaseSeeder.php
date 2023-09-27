@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\AuthenticationMethod::factory()->create([
             'name' => 'No Auth',
+            'type' => \App\Models\AuthenticationMethod::TYPE_NOAUTH,
         ]);
     }
 }
