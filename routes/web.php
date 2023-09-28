@@ -16,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (Request $request) {
-    return view('welcome');
+    return redirect(env('APP_URL'). '/adminpanel');
 });
