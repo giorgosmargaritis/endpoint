@@ -21,8 +21,8 @@ class Log extends Model
      * @var string[]
      */
     protected $fillable = [
-        'data',
         'endpoint_id',
+        'log_type',
     ];
 
     public function endpoint(): BelongsTo
