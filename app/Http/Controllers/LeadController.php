@@ -49,7 +49,7 @@ class LeadController extends Controller
 
         $logMessage = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
 
-        $log_id = $endpointHelper->createLog($endpoint, $logMessage);
+        $log_id = $endpointHelper->createLogData($endpoint, $logMessage);
 
         foreach($endpointsReceivers as $endpointReceiver)
         {

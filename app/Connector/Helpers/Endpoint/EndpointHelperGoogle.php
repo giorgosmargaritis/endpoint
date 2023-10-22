@@ -23,7 +23,7 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
     {
         $log = Logmodel::create([
             'endpoint_id' => $endpoint->id,
-            'log_type' => Logmodel::LOG_TYPE_GOOGLE,
+            'log_type' => Logmodel::LOG_TYPE_GOOGLE
         ]);
 
         $log_data_google = LogDataGoogle::create([
