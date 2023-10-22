@@ -43,13 +43,14 @@ class LeadController extends Controller
             return response('Not Verified Request', 403);
         }
         
-        $logMessage = json_decode($request->getContent());
+        $data_array = json_decode($request->getContent());
+        Log::info($data_array);
 
         $endpointsReceivers = $endpoint->receiversendpoints;
 
         // $logMessage = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
 
-        $log_id = $endpointHelper->createLogData($endpoint, $logMessage);
+        $log_id = $endpointHelper->createLogData($endpoint, $request->getContent());
 
         // foreach($endpointsReceivers as $endpointReceiver)
         // {
