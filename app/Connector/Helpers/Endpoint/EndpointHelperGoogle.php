@@ -28,7 +28,7 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
 
         $log_data_google = LogDataGoogle::create([
             'log_id' => $log->id,
-            'data_received',
+            'data_received' => $logMessage,
         ]);
 
         return (int) $log->id;
