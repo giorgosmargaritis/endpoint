@@ -4,9 +4,13 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Connector\Helpers\LogReceiverHelper;
+use App\Connector\Helpers\LogReceiverAttemptHelper;
 
 class LogReceiverAttempt extends Resource
 {
@@ -44,7 +48,17 @@ class LogReceiverAttempt extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Response'),
-            DateTime::make('Created At'),
+            Select::make('HTTP Code', 'status_code')
+                ->options(LogReceiverAttemptHelper::getStatusesCodes())
+                ->filterable(),
+            BelongsTo::make('Data', 'logsreceivers', 'App\Nova\LogReceiver')
+            ->display(function ($logsreceivers) {
+                return $logsreceivers->transformed_data;
+            })
+            ->onlyOnDetail(),
+            DateTime::make('Created At')
+                ->filterable()
+                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
 
         ];
     }

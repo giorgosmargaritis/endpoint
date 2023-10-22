@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Menu\MenuItem;
 use App\Nova\AuthenticationMethod;
+use App\Nova\EndpointReceiver;
 use Laravel\Nova\Menu\MenuSection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
@@ -28,9 +29,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         parent::boot();
 
+        Nova::withoutNotificationCenter();
+        Nova::withoutGlobalSearch();
+
         Nova::mainMenu(function (Request $request) {
             return [
                 MenuSection::make('Resources', [
+                    MenuItem::resource(EndpointReceiver::class),
                     MenuItem::resource(Receiver::class),
                     MenuItem::resource(Endpoint::class),
                     MenuItem::resource(AuthenticationMethod::class),
@@ -41,7 +46,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         });
 
         Nova::footer(function ($request) {
-            return Blade::render('<p style="text-align:center;">Kosmocar Admin Panel Version ' . \Laravel\Nova\Nova::version() . '</p>');
+            return Blade::render('<p style="text-align:center;">Connector Admin Panel</p>');
         });
     }
 

@@ -23,8 +23,14 @@ class LogReceiver extends Model
      */
     protected $fillable = [
         'log_id',
+        'endpoints_receivers_id',
         'receiver_id',
         'status',
+        'transformed_data',
+    ];
+
+    protected $casts = [
+        'transformed_data' => 'array'
     ];
 
     protected $table = 'logs_receivers';
@@ -39,8 +45,8 @@ class LogReceiver extends Model
         return $this->belongsTo(Log::class);
     }
 
-    public function receiver(): BelongsTo
+    public function endpointreceiver(): BelongsTo
     {
-        return $this->belongsTo(Receiver::class);
+        return $this->belongsTo(EndpointReceiver::class);
     }
 }

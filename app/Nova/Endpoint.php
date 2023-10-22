@@ -5,8 +5,11 @@ namespace App\Nova;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MultiSelect;
+use App\Connector\Helpers\EndpointHelper;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Endpoint extends Resource
@@ -61,7 +64,10 @@ class Endpoint extends Resource
 
             Text::make('Webhook Path', 'path')
                 ->rules('required')
-                ->creationRules('unique:endpoints,path'),
+                ->creationRules('unique:endpoints,path')
+                ->displayUsing(function ($value) {
+                    return '{{domain}}/api/webhook/' . $value;
+                }),
 
             Text::make('Token', 'verification_token')
                 ->readonly(function ($request) {
@@ -71,10 +77,16 @@ class Endpoint extends Resource
                 ->maxlength(20)
                 ->enforceMaxlength()
                 ->rules('required')
-                ->creationRules('unique:endpoints,verification_token')
+                ->creationRules('unique:endpoints,verification_token'),
                 // ->hideWhenUpdating(),
                 
-            // HasMany::make('Logs', 'logs'),
+            Select::make('Schema', 'type')
+                ->options(EndpointHelper::getTypes())
+                ->displayUsingLabels()
+                ->rules('required')
+                ->filterable(),
+
+            HasMany::make('Logs', 'logs')
         ];
     }
 

@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs_receivers_attempts', function (Blueprint $table) {
+        Schema::create('log_data_google', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('logs_receivers_id')->constrained()->onDelete('cascade');
-            $table->text('status_code');
-            $table->longText('response');
+            $table->bigInteger('log_id')->unsigned();
+            $table->longText('data_received');
             $table->timestamps();
+
+            $table->foreign('log_id')->references('id')->on('logs')->onDelete('cascade');
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs_receivers_attempts');
+        Schema::dropIfExists('log_data_google');
     }
 };

@@ -10,7 +10,7 @@ class LogReceiverAttempt extends Model
 {
     use HasFactory;
 
-    const STATUS_SUCCESS = 200;
+    const STATUS_SUCCESS = [200, 201];
     const STATUS_SAMEID = 305;
     const STATUS_EMPTYLEADID = 400;
 

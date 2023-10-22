@@ -49,5 +49,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'No Auth',
             'type' => \App\Models\AuthenticationMethod::TYPE_NOAUTH,
         ]);
+
+        \App\Models\AuthenticationMethod::factory()->create([
+            'name' => 'Headers Auth',
+            'type' => \App\Models\AuthenticationMethod::TYPE_HEADER,
+        ]);
     }
 }

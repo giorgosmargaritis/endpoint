@@ -12,6 +12,8 @@ class Receiver extends Model
 {
     use HasFactory;
 
+    const TYPE_POWERAPP_SCHEMA = 0;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,11 +22,24 @@ class Receiver extends Model
     protected $fillable = [
         'name',
         'url',
+        'type',
+        'schema_type',
+        'authentication_method_id',
+        'auth_data'
     ];
 
-    public function endpoint(): BelongsTo
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'auth_data' => 'array',
+    ];
+
+    public function endpointsreceivers(): HasMany
     {
-        return $this->belongsTo(Endpoint::class);
+        return $this->hasMany(EndpointReceiver::class);
     }
 
     public function authenticationmethod(): BelongsTo

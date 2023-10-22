@@ -29,8 +29,8 @@ class SendLog extends Action
     {
         $logReceiver = $models->first();
 
-        $headerUsername = $logReceiver->receiver->authenticationmethod->data['Username'];
-        $headerPassword = $logReceiver->receiver->authenticationmethod->data['Password'];
+        $headerUsername = $logReceiver->receiver->auth_data['Username'];
+        $headerPassword = $logReceiver->receiver->auth_data['Password'];
 
         $response = Http::withHeaders([
             'Username' => $headerUsername,
@@ -58,12 +58,11 @@ class SendLog extends Action
 
         Log::info($response->status());
 
-        if($response->status() === LogReceiverAttempt::STATUS_SUCCESS)
+        if(in_array($response->status(), LogReceiverAttempt::STATUS_SUCCESS))
         {
             $logReceiver->status = LogReceiver::STATUS_SUCCESS;
         }
-
-        if($response->status() === LogReceiverAttempt::STATUS_SAMEID || $response->status() === LogReceiverAttempt::STATUS_EMPTYLEADID)
+        else
         {
             $logReceiver->status = LogReceiver::STATUS_FAIL;
         }

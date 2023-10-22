@@ -55,9 +55,6 @@ class AuthenticationMethod extends Resource
 
             Text::make('Name')
                 ->exceptOnForms(),
-
-            KeyValue::make('Data')
-                ->rules('json'),
         ];
     }
 

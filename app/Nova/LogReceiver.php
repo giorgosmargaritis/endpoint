@@ -2,14 +2,17 @@
 
 namespace App\Nova;
 
-use App\Models\LogReceiver as ModelsLogReceiver;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Connector\Helpers\LogReceiverHelper;
+use App\Models\LogReceiver as ModelsLogReceiver;
 
 class LogReceiver extends Resource
 {
@@ -66,13 +69,33 @@ class LogReceiver extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('Receiver', 'receiver', 'App\Nova\Receiver')
+            // BelongsTo::make('Connection', 'endpointreceiver', 'App\Nova\EndpointReceiver')
+            //     ->filterable()
+            //     ->exceptOnForms(),
+
+            // Text::make('lead_id')
+            // ->displayUsing(function ($data)),
+
+            Select::make('Status', 'status')
+                ->options(LogReceiverHelper::getStatuses())
+                ->displayUsingLabels()
                 ->filterable()
                 ->exceptOnForms(),
 
-            Text::make('Status')
+            // Text::make('Campaign ID', 'transformed_data->Campaign_id')
+            //     ->filterable()
+            //     ->sortable(),
+
+            DateTime::make('Created At')
                 ->filterable()
-                ->exceptOnForms(),
+                ->exceptOnForms()
+                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+
+            BelongsTo::make('Received data', 'log', 'App\Nova\Log')
+                ->display(function ($log) {
+                    return $log->data;
+                })
+                ->onlyOnDetail(),
 
             HasMany::make('Attempts', 'logsreceiversattempts', 'App\Nova\LogReceiverAttempt'),
 

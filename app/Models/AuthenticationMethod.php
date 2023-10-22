@@ -11,15 +11,7 @@ class AuthenticationMethod extends Model
     use HasFactory;
 
     const TYPE_NOAUTH = 0;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'data' => 'array',
-    ];
+    const TYPE_HEADER = 1;
 
     public function receivers(): HasMany
     {

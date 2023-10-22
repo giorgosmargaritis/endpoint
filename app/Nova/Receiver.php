@@ -4,14 +4,11 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Fields\Text;
-use App\Nova\LogReceiverFields;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
+use Outl1ne\MultiselectField\Multiselect;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Receiver extends Resource
@@ -63,11 +60,10 @@ class Receiver extends Resource
 
             Text::make('URL', 'url')->hideFromIndex()->rules('required'),
 
-            BelongsTo::make('Endpoint', 'endpoint'),
-
             BelongsTo::make('Authentication Method', 'authenticationmethod'),
 
-            HasMany::make('Logs', 'logsreceivers', 'App\Nova\LogReceiver'),
+            KeyValue::make('Auth Data', 'auth_data')
+                ->rules('json'),
         ];
     }
 

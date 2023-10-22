@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Endpoint extends Model
 {
     use HasFactory;
+
+    const SOCIAL_MEDIA_TYPE_FACEBOOK = 0;
+    const SOCIAL_MEDIA_TYPE_GOOGLE   = 1;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +23,8 @@ class Endpoint extends Model
         'name',
         'path',
         'verification_token',
+        'page_access_token',
+        'type',
     ];
 
     /**
@@ -33,8 +39,8 @@ class Endpoint extends Model
         return $this->hasMany(Log::class);
     }
 
-    public function receivers(): HasMany
+    public function receiversendpoints(): HasMany
     {
-        return $this->hasMany(Receiver::class);
+        return $this->hasMany(EndpointReceiver::class);
     }
 }
