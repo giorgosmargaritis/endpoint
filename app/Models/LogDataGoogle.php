@@ -18,6 +18,7 @@ class LogDataGoogle extends Model
      * @var string[]
      */
     protected $fillable = [
+        'log_id',
         'data_received',
     ];
 

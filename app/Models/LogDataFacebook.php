@@ -16,6 +16,7 @@ class LogDataFacebook extends Model
      * @var string[]
      */
     protected $fillable = [
+        'log_id',
         'data_received',
         'data_requested',
         'data_requested_response',
