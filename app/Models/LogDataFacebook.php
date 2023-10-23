@@ -10,6 +10,8 @@ class LogDataFacebook extends Model
 {
     use HasFactory;
 
+    protected $table = 'log_data_facebook';
+
     /**
      * The attributes that are mass assignable.
      *
