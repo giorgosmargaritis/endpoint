@@ -22,9 +22,9 @@ class LogDataGoogle extends Model
         'data_received',
     ];
 
-    protected $casts = [
-        'data_received' => 'array',
-    ];
+    // protected $casts = [
+    //     'data_received' => 'array',
+    // ];
 
     public function log(): BelongsTo
     {

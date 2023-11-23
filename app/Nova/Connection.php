@@ -9,23 +9,14 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class EndpointReceiver extends Resource
+class Connection extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\EndpointReceiver>
+     * @var class-string<\App\Models\Connection>
      */
-    public static $model = \App\Models\EndpointReceiver::class;
-
-    /**
-    * Get the value that should be displayed to represent the title of the resource.
-    *
-    * @return string
-    */
-    public static function label() {
-        return 'Connections';
-    }
+    public static $model = \App\Models\Connection::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -41,6 +32,8 @@ class EndpointReceiver extends Resource
      */
     public static $search = [
         'id',
+        'endpoint',
+        'receiver',
     ];
 
     /**
@@ -55,7 +48,7 @@ class EndpointReceiver extends Resource
             ID::make()->sortable(),
             BelongsTo::make('Endpoint', 'endpoint', 'App\Nova\Endpoint'),
             BelongsTo::make('Receiver', 'receiver', 'App\Nova\Receiver'),
-            HasMany::make('Logs', 'logsreceivers', 'App\Nova\LogReceiver'),
+            HasMany::make('Logs', 'connectionslogs', 'App\Nova\ConnectionLog'),
         ];
     }
 

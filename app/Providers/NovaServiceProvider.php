@@ -6,13 +6,10 @@ use App\Nova\User;
 use App\Nova\Endpoint;
 use App\Nova\Receiver;
 use Laravel\Nova\Nova;
-use App\Nova\LogReceiver;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Date;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Menu\MenuItem;
 use App\Nova\AuthenticationMethod;
-use App\Nova\EndpointReceiver;
+use App\Nova\Connection;
 use Laravel\Nova\Menu\MenuSection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
@@ -35,11 +32,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         Nova::mainMenu(function (Request $request) {
             return [
                 MenuSection::make('Resources', [
-                    MenuItem::resource(EndpointReceiver::class),
+                    MenuItem::resource(Connection::class),
                     MenuItem::resource(Receiver::class),
                     MenuItem::resource(Endpoint::class),
                     MenuItem::resource(AuthenticationMethod::class),
-                    MenuItem::resource(LogReceiver::class),
                     MenuItem::resource(User::class),
                 ])
             ];
@@ -108,7 +104,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function register()
     {
-        Nova::initialPath('/resources/receivers');
+        Nova::initialPath('/resources/connections');
     }
     
 }

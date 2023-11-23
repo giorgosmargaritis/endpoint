@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('endpoints_receivers', function (Blueprint $table) {
+        Schema::create('connection_log_attempts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('endpoint_id')->constrained()->onDelete('cascade');
-            $table->foreignId('receiver_id')->constrained()->onDelete('cascade');
-            $table->unique(['endpoint_id', 'receiver_id']);
+            $table->foreignId('connections_logs_id')->constrained()->onDelete('cascade');
+            $table->text('status_code');
+            $table->longText('response');
             $table->timestamps();
-
         });
     }
 
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('endpoints_receivers');
+        Schema::dropIfExists('connection_log_attempts');
     }
 };

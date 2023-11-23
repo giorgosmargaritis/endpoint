@@ -15,10 +15,24 @@ class AuthenticationMethodPolicy
         //
     }
 
+    public function viewAny(User $user)
+    {
+        if($user->role->id === 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function view(User $user, AuthenticationMethod $model)
     {
         // Authorization logic for viewing a model
-        return true;
+        if($user->role->id === 1)
+        {
+            return true;
+        }
+        return false;
     }
 
     public function create(User $user)
@@ -30,7 +44,7 @@ class AuthenticationMethodPolicy
     public function update(User $user, AuthenticationMethod $model)
     {
         // Authorization logic for updating a model
-        return true;
+        return false;
     }
 
     public function delete(User $user, AuthenticationMethod $model)

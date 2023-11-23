@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Log extends Model
@@ -21,18 +20,12 @@ class Log extends Model
      * @var string[]
      */
     protected $fillable = [
-        'endpoint_id',
         'log_type',
     ];
 
-    public function endpoint(): BelongsTo
+    public function connectionlogs(): HasMany
     {
-        return $this->belongsTo(Endpoint::class);
-    }
-
-    public function receivers(): BelongsToMany
-    {
-        return $this->belongsToMany(Receiver::class, 'logs_receivers')->withPivot('status')->withTimestamps();
+        return $this->hasMany(ConnectionLog::class);
     }
 
     public function log_data_facebook(): HasOne

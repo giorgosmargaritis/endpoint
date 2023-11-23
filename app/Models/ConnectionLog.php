@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Laravel\Nova\Actions\Actionable;
 
-class LogReceiver extends Model
+class ConnectionLog extends Model
 {
-    use HasFactory, Actionable;
+    use HasFactory;
 
     const STATUS_FAIL = 0;
     const STATUS_SUCCESS = 1;
     const STATUS_PENDING = 2;
+
+    protected $table = 'connections_logs';
 
     /**
      * The attributes that are mass assignable.
@@ -22,22 +23,17 @@ class LogReceiver extends Model
      * @var string[]
      */
     protected $fillable = [
+        'connection_id',
         'log_id',
-        'endpoints_receivers_id',
-        'receiver_id',
-        'status',
+        'campaign_id',
+        'leadgen_id',
         'transformed_data',
+        'status',
     ];
 
-    protected $casts = [
-        'transformed_data' => 'array'
-    ];
-
-    protected $table = 'logs_receivers';
-
-    public function logsreceiversattempts(): HasMany
+    public function connectionlogattempts(): HasMany
     {
-        return $this->hasMany(LogReceiverAttempt::class, 'logs_receivers_id', 'id');
+        return $this->hasMany(ConnectionLogAttempt::class, 'connections_logs_id');
     }
 
     public function log(): BelongsTo
@@ -45,8 +41,8 @@ class LogReceiver extends Model
         return $this->belongsTo(Log::class);
     }
 
-    public function endpointreceiver(): BelongsTo
+    public function connection(): BelongsTo
     {
-        return $this->belongsTo(EndpointReceiver::class);
+        return $this->belongsTo(Connection::class);
     }
 }

@@ -22,8 +22,6 @@ class Receiver extends Model
     protected $fillable = [
         'name',
         'url',
-        'type',
-        'schema_type',
         'authentication_method_id',
         'auth_data'
     ];
@@ -37,23 +35,13 @@ class Receiver extends Model
         'auth_data' => 'array',
     ];
 
-    public function endpointsreceivers(): HasMany
+    public function connections(): HasMany
     {
-        return $this->hasMany(EndpointReceiver::class);
+        return $this->hasMany(Connection::class);
     }
 
     public function authenticationmethod(): BelongsTo
     {
         return $this->belongsTo(AuthenticationMethod::class);
-    }
-
-    public function logs(): BelongsToMany
-    {
-        return $this->belongsToMany(Log::class, 'logs_receivers')->withPivot('status')->withTimestamps();
-    }
-
-    public function logsreceivers(): HasMany
-    {
-        return $this->hasMany(LogReceiver::class);
     }
 }

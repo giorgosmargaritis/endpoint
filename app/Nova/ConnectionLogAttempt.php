@@ -7,19 +7,17 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use App\Connector\Helpers\LogReceiverHelper;
-use App\Connector\Helpers\LogReceiverAttemptHelper;
+use App\Connector\Helpers\ConnectionLogAttemptHelper;
 
-class LogReceiverAttempt extends Resource
+class ConnectionLogAttempt extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\LogReceiverAttempt>
+     * @var class-string<\App\Models\ConnectionLogAttempt>
      */
-    public static $model = \App\Models\LogReceiverAttempt::class;
+    public static $model = \App\Models\ConnectionLogAttempt::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -35,6 +33,8 @@ class LogReceiverAttempt extends Resource
      */
     public static $search = [
         'id',
+        'response',
+        'status_code',
     ];
 
     /**
@@ -47,18 +47,16 @@ class LogReceiverAttempt extends Resource
     {
         return [
             ID::make()->sortable(),
+
             Text::make('Response'),
+
             Select::make('HTTP Code', 'status_code')
-                ->options(LogReceiverAttemptHelper::getStatusesCodes())
+                ->options(ConnectionLogAttemptHelper::getStatusesCodes())
                 ->filterable(),
-            BelongsTo::make('Data', 'logsreceivers', 'App\Nova\LogReceiver')
-            ->display(function ($logsreceivers) {
-                return $logsreceivers->transformed_data;
-            })
-            ->onlyOnDetail(),
+
             DateTime::make('Created At')
-                ->filterable()
-                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : '')
+                ->filterable(),
 
         ];
     }

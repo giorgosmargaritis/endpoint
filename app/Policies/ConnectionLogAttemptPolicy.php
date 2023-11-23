@@ -3,9 +3,9 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\LogReceiverAttempt;
+use App\Models\ConnectionLogAttempt;
 
-class LogReceiverAttemptPolicy
+class ConnectionLogAttemptPolicy
 {
     /**
      * Create a new policy instance.
@@ -15,7 +15,12 @@ class LogReceiverAttemptPolicy
         //
     }
 
-    public function view(User $user, LogReceiverAttempt $model)
+    public function viewAny(User $user)
+    {
+        return true;
+    }
+
+    public function view(User $user, ConnectionLogAttempt $model)
     {
         // Authorization logic for viewing a model
         return true;
@@ -27,13 +32,13 @@ class LogReceiverAttemptPolicy
         return false;
     }
 
-    public function update(User $user, LogReceiverAttempt $model)
+    public function update(User $user, ConnectionLogAttempt $model)
     {
         // Authorization logic for updating a model
         return false;
     }
 
-    public function delete(User $user, LogReceiverAttempt $model)
+    public function delete(User $user, ConnectionLogAttempt $model)
     {
         // Authorization logic for deleting a model
         return false;

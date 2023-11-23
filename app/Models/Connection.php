@@ -7,15 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class EndpointReceiver extends Model
+class Connection extends Model
 {
     use HasFactory;
 
-    protected $table = 'endpoints_receivers';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        'endpoint_id',
+        'receiver_id',
+    ];
 
-    public function logsreceivers(): HasMany
+    public function connectionslogs(): HasMany
     {
-        return $this->hasMany(LogReceiver::class, 'endpoints_receivers_id', 'id');
+        return $this->hasMany(ConnectionLog::class);
     }
 
     public function endpoint(): BelongsTo

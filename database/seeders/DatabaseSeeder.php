@@ -13,7 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Role::factory()->create();
+        \App\Models\Role::factory()->create([
+            'name' => 'superadmin',
+        ]);
+
+        \App\Models\Role::factory()->create([
+            'name' => 'admin',
+        ]);
+
+        \App\Models\Role::factory()->create([
+            'name' => 'marketer',
+        ]);
 
         \App\Models\User::factory()->create([
             'first_name' => 'Giorgos',
@@ -43,6 +53,26 @@ class DatabaseSeeder extends Seeder
             'password' => '$2y$10$8gXIAXAq4aY93izJ8PMJVOAxQXzqUEv7UaCtHK.HWO70s1BXYwfh2',
             'remember_token' => Str::random(10),
             'role_id' => 1,
+        ]);
+
+        \App\Models\User::factory()->create([
+            'first_name' => 'Admin',
+            'last_name' => 'Kosmocar',
+            'email' => 'admin@kosmocar.com',
+            'email_verified_at' => now(),
+            'password' => '$2y$10$8gXIAXAq4aY93izJ8PMJVOAxQXzqUEv7UaCtHK.HWO70s1BXYwfh2',
+            'remember_token' => Str::random(10),
+            'role_id' => 2,
+        ]);
+
+        \App\Models\User::factory()->create([
+            'first_name' => 'Marketer',
+            'last_name' => 'Kosmocar',
+            'email' => 'marketer@kosmocar.com',
+            'email_verified_at' => now(),
+            'password' => '$2y$10$8gXIAXAq4aY93izJ8PMJVOAxQXzqUEv7UaCtHK.HWO70s1BXYwfh2',
+            'remember_token' => Str::random(10),
+            'role_id' => 3,
         ]);
 
         \App\Models\AuthenticationMethod::factory()->create([

@@ -34,13 +34,8 @@ class Endpoint extends Model
      */
     // protected $with = ['receivers'];
 
-    public function logs(): HasMany
+    public function connections(): HasMany
     {
-        return $this->hasMany(Log::class);
-    }
-
-    public function receiversendpoints(): HasMany
-    {
-        return $this->hasMany(EndpointReceiver::class);
+        return $this->hasMany(Connection::class);
     }
 }

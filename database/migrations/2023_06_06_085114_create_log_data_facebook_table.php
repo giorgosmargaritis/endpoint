@@ -16,7 +16,6 @@ return new class extends Migration
             $table->bigInteger('log_id')->unsigned();
             $table->longText('data_received');
             $table->longText('data_requested')->nullable();
-            $table->longText('data_requested_response')->nullable();
             $table->tinyInteger('data_requested_status')->unsigned()->nullable();
             $table->timestamps();
 

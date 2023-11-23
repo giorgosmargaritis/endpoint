@@ -8,5 +8,5 @@ use Illuminate\Http\Request;
 interface EndpointHelperInterface
 {
     public function verifiedRequest(Endpoint $endpoint, Request $request);
-    public function createLogData(Endpoint $endpoint, $logData): int;
+    public function createLogData(Endpoint $endpoint, $logData);
 }

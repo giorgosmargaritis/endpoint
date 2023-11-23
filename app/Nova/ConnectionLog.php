@@ -8,20 +8,19 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use App\Connector\Helpers\LogReceiverHelper;
-use App\Models\LogReceiver as ModelsLogReceiver;
+use App\Connector\Helpers\ConnectionLogHelper;
+use App\Models\ConnectionLog as ModelsConnectionLog;
 
-class LogReceiver extends Resource
+class ConnectionLog extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\LogReceiver>
+     * @var class-string<\App\Models\ConnectionLog>
      */
-    public static $model = \App\Models\LogReceiver::class;
+    public static $model = \App\Models\ConnectionLog::class;
 
     /**
      * The click action to use when clicking on the resource in the table.
@@ -30,16 +29,7 @@ class LogReceiver extends Resource
      *
      * @var string
      */
-    public static $clickAction = 'ignore';
-
-    /**
-    * Get the value that should be displayed to represent the title of the resource.
-    *
-    * @return string
-    */
-    public static function label() {
-        return 'Logs';
-    }
+    // public static $clickAction = 'ignore';
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -56,6 +46,9 @@ class LogReceiver extends Resource
      */
     public static $search = [
         'id',
+        'campaign_id',
+        'leadgen_id',
+        'status',
     ];
 
     /**
@@ -73,32 +66,36 @@ class LogReceiver extends Resource
             //     ->filterable()
             //     ->exceptOnForms(),
 
-            // Text::make('lead_id')
-            // ->displayUsing(function ($data)),
+            Text::make('Campaign ID', 'campaign_id')
+                ->sortable()
+                ->filterable(function ($request, $query, $value, $attribute) {
+                    $query->where($attribute, 'LIKE', "{$value}%");
+                }),
+
+            Text::make('Leadgen ID', 'leadgen_id')
+                ->sortable()
+                ->filterable(function ($request, $query, $value, $attribute) {
+                    $query->where($attribute, 'LIKE', "{$value}%");
+                }),
 
             Select::make('Status', 'status')
-                ->options(LogReceiverHelper::getStatuses())
+                ->options(ConnectionLogHelper::getStatuses())
                 ->displayUsingLabels()
-                ->filterable()
-                ->exceptOnForms(),
-
-            // Text::make('Campaign ID', 'transformed_data->Campaign_id')
-            //     ->filterable()
-            //     ->sortable(),
-
-            DateTime::make('Created At')
-                ->filterable()
                 ->exceptOnForms()
-                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+                ->filterable(),
 
-            BelongsTo::make('Received data', 'log', 'App\Nova\Log')
-                ->display(function ($log) {
-                    return $log->data;
-                })
+            BelongsTo::make('Original Data', 'log', 'App\Nova\Log')
                 ->onlyOnDetail(),
 
-            HasMany::make('Attempts', 'logsreceiversattempts', 'App\Nova\LogReceiverAttempt'),
+            Text::make('Transformed Data', 'transformed_data')
+                ->onlyOnDetail(),
 
+            DateTime::make('Created At')
+                ->exceptOnForms()
+                ->filterable()
+                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+
+            HasMany::make('Attempts', 'connectionlogattempts', 'App\Nova\ConnectionLogAttempt'),
         ];
     }
 
@@ -146,10 +143,13 @@ class LogReceiver extends Resource
         return [
             (new \App\Nova\Actions\SendLog)
                 ->canSee(function ($request) {
-                    if($this->model()->status !== ModelsLogReceiver::STATUS_SUCCESS)
+                    if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS)
                     {
                         return true;
                     }
+                })
+                ->canRun(function ($request) {
+                    return true;
                 }),
         ];
     }

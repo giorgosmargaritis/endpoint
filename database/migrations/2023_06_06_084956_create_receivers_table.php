@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('url');
-            // $table->tinyInteger('schema_type')->unsigned();
             $table->bigInteger('authenticationmethod_id')->unsigned();
             $table->longText('auth_data')->nullable();
             $table->timestamps();

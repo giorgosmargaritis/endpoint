@@ -41,7 +41,7 @@ class LogDataGoogle extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('data_received'),
+            Text::make('Data Received'),
         ];
     }
 

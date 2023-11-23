@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class LogReceiverAttempt extends Model
+class ConnectionLogAttempt extends Model
 {
     use HasFactory;
 
@@ -14,15 +14,13 @@ class LogReceiverAttempt extends Model
     const STATUS_SAMEID = 305;
     const STATUS_EMPTYLEADID = 400;
 
-    protected $table = 'logs_receivers_attempts';
-
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'logs_receivers_id',
+        'connections_logs_id',
         'status_code',
         'response',
     ];
@@ -36,8 +34,8 @@ class LogReceiverAttempt extends Model
     //     'response' => 'array',
     // ];
 
-    public function logsreceivers(): BelongsTo
+    public function connectionlog(): BelongsTo
     {
-        return $this->belongsTo(LogReceiver::class, 'logs_receivers_id');
+        return $this->belongsTo(ConnectionLog::class);
     }
 }

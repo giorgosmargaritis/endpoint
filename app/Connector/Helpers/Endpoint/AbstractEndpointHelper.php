@@ -19,9 +19,11 @@ abstract class AbstractEndpointHelper implements EndpointHelperInterface
 
     public function hasReceivers(Endpoint $endpoint)
     {
-        if(!empty($endpoint->receiversendpoints))
+        if(empty($endpoint->connections))
         {
-            return true;
+            return false;
         }
+        
+        return true;
     }
 }

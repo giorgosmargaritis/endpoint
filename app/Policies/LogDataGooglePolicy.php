@@ -3,9 +3,8 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\LogReceiver;
 
-class LogReceiverPolicy
+class LogDataGooglePolicy
 {
     /**
      * Create a new policy instance.
@@ -15,7 +14,12 @@ class LogReceiverPolicy
         //
     }
 
-    public function view(User $user, LogReceiver $model)
+    public function viewAny(User $user)
+    {
+        return true;
+    }
+
+    public function view(User $user)
     {
         // Authorization logic for viewing a model
         return true;
@@ -27,13 +31,13 @@ class LogReceiverPolicy
         return false;
     }
 
-    public function update(User $user, LogReceiver $model)
+    public function update(User $user)
     {
         // Authorization logic for updating a model
-        return true;
+        return false;
     }
 
-    public function delete(User $user, LogReceiver $model)
+    public function delete(User $user)
     {
         // Authorization logic for deleting a model
         return false;

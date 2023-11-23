@@ -2,10 +2,12 @@
 
 namespace App\Nova;
 
+use App\Models\AuthenticationMethod;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
 use Outl1ne\MultiselectField\Multiselect;
@@ -42,7 +44,9 @@ class Receiver extends Resource
      * @var array
      */
     public static $search = [
+        'id',
         'name',
+        'url',
     ];
 
     /**
@@ -63,7 +67,20 @@ class Receiver extends Resource
             BelongsTo::make('Authentication Method', 'authenticationmethod'),
 
             KeyValue::make('Auth Data', 'auth_data')
-                ->rules('json'),
+                ->hide()
+                ->rules('json')
+                ->dependsOn(
+                    ['authenticationmethod'],
+                    function (KeyValue $field, NovaRequest $request, FormData $formData) {
+                        if($formData->authenticationmethod)
+                        {
+                            $authMethodType = AuthenticationMethod::find($formData->authenticationmethod)->type;
+                            if ($authMethodType !== AuthenticationMethod::TYPE_NOAUTH) {
+                                $field->show()->rules(['required']);
+                            }
+                        }
+                    }
+                ),
         ];
     }
 

@@ -2,12 +2,12 @@
 
 namespace App\Nova\Actions;
 
-use App\Models\LogReceiver;
+use App\Models\ConnectionLog;
 use Illuminate\Bus\Queueable;
 use Laravel\Nova\Actions\Action;
-use App\Models\LogReceiverAttempt;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use App\Models\ConnectionLogAttempt;
 use Illuminate\Support\Facades\Http;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
@@ -27,47 +27,36 @@ class SendLog extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        $logReceiver = $models->first();
+        $connectionLog = $models->first();
 
-        $headerUsername = $logReceiver->receiver->auth_data['Username'];
-        $headerPassword = $logReceiver->receiver->auth_data['Password'];
+        $headerUsername = $connectionLog->connection->receiver->auth_data['Username'];
+        $headerPassword = $connectionLog->connection->receiver->auth_data['Password'];
 
         $response = Http::withHeaders([
             'Username' => $headerUsername,
             'Password' => $headerPassword,
-        ])->post($logReceiver->receiver->url, [
-            "Campaign_id" => "FB_45678_Taigo_01",
-            "Leadid" => "56547ΓΔΦΓ1128",
-            "FName" => "Anna",
-            "LastName" => "Kotzamani",
-            "LeadDate" => "12/9/2023",
-            "Email" => "anakot@kosmocar.gr",
-            "Mobile" => "6946325145",
-            "Brand" => "vw",
-            "Model" => "Taigo",
-            "DealerCode" => "501",
-            "ContactReason" => "Offer",
-            "Regnum" => "YMH7945"
-        ]);
+        ])->post($connectionLog->connection->receiver->url,
+            json_decode($connectionLog->transformed_data, true)
+        );
 
-        $logReceiverAttempt = LogReceiverAttempt::create([
-            'logs_receivers_id' => $logReceiver->id,
+        $connectionLogAttempt = ConnectionLogAttempt::create([
+            'connections_logs_id' => $connectionLog->id,
             'status_code' => $response->status(),
             'response' => $response
         ]);
 
         Log::info($response->status());
 
-        if(in_array($response->status(), LogReceiverAttempt::STATUS_SUCCESS))
+        if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
         {
-            $logReceiver->status = LogReceiver::STATUS_SUCCESS;
+            $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
         }
         else
         {
-            $logReceiver->status = LogReceiver::STATUS_FAIL;
+            $connectionLog->status = ConnectionLog::STATUS_FAIL;
         }
 
-        $logReceiver->saveQuietly();
+        $connectionLog->saveQuietly();
 
         return Action::message('Log was sent successfully!');
     }

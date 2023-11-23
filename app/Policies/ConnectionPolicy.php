@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Log;
 use App\Models\User;
+use App\Models\Connection;
 
-class LogPolicy
+class ConnectionPolicy
 {
     /**
      * Create a new policy instance.
@@ -20,27 +20,41 @@ class LogPolicy
         return true;
     }
 
-    public function view(User $user, Log $model)
+    public function view(User $user)
     {
-        // Authorization logic for viewing a model
         return true;
     }
 
     public function create(User $user)
     {
         // Authorization logic for creating a model
-        return false;
+        if($user->role->id === 3)
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public function update(User $user, Log $model)
+    public function update(User $user, Connection $model)
     {
         // Authorization logic for updating a model
-        return false;
+        if($user->role->id === 3)
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public function delete(User $user, Log $model)
+    public function delete(User $user, Connection $model)
     {
         // Authorization logic for deleting a model
-        return false;
+        if($user->role->id === 3)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

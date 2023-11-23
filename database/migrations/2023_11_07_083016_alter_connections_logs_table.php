@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs', function (Blueprint $table) {
-            $table->id();            
-            $table->tinyInteger('log_type')->unsigned();
-            $table->timestamps();
+        Schema::table('connections_logs', function (Blueprint $table) {
+            $table->string('campaign_id')->index('campaign_id')->after('log_id');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs');
+        Schema::table('connections_logs', function (Blueprint $table) {
+            $table->dropColumn(['campaign_id']);
+        });
     }
 };

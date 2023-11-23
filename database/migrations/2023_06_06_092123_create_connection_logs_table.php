@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs_receivers', function (Blueprint $table) {
+        Schema::create('connections_logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('connection_id')->constrained()->onDelete('cascade');
             $table->foreignId('log_id')->constrained()->onDelete('cascade');
-            $table->foreignId('endpoints_receivers_id')->constrained()->onDelete('cascade');
-            $table->unique(['log_id', 'endpoints_receivers_id']);
+            $table->unique(['connection_id', 'log_id']);
+            $table->string('campaign_id')->index('campaign_id');
+            $table->string('leadgen_id')->index('leadgen_id');
             $table->longText('transformed_data');
-            $table->boolean('status');
+            $table->tinyInteger('status')->unsigned();
             $table->timestamps();
-
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('logs_receivers');
+        Schema::dropIfExists('connections_logs');
     }
 };

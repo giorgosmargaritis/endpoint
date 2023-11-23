@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Log;
 use App\Models\User;
 
-class LogPolicy
+class LogDataFacebookPolicy
 {
     /**
      * Create a new policy instance.
@@ -20,7 +19,7 @@ class LogPolicy
         return true;
     }
 
-    public function view(User $user, Log $model)
+    public function view(User $user)
     {
         // Authorization logic for viewing a model
         return true;
@@ -32,13 +31,13 @@ class LogPolicy
         return false;
     }
 
-    public function update(User $user, Log $model)
+    public function update(User $user)
     {
         // Authorization logic for updating a model
         return false;
     }
 
-    public function delete(User $user, Log $model)
+    public function delete(User $user)
     {
         // Authorization logic for deleting a model
         return false;

@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\Log as ModelsLog;
 use DateTime;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -52,7 +53,17 @@ class Log extends Resource
     {
         return [
             ID::make()->sortable(),
-            HasOne::make('Data', 'log_data_google', 'App\Nova\LogDataGoogle'),
+
+            HasOne::make('Data Facebook', 'log_data_facebook', 'App\Nova\LogDataFacebook')
+            ->canSee(function ($request) {
+                return $this->resource->log_type === ModelsLog::LOG_TYPE_FACEBOOK;
+            }),
+
+            HasOne::make('Data Google', 'log_data_google', 'App\Nova\LogDataGoogle')
+            ->canSee(function ($request) {
+                return ($this->resource->log_type === ModelsLog::LOG_TYPE_GOOGLE);
+            }),
+
             FieldsDateTime::make('Created At')
                 ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
         ];

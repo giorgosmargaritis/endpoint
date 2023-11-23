@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Endpoint;
-use App\Models\LogReceiver;
 use Illuminate\Http\Request;
-use App\Models\Log as Logmodel;
-use App\Models\LogReceiverAttempt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Connector\Helpers\Endpoint\AbstractEndpointHelper;
+use App\Models\ConnectionLog;
+use App\Models\ConnectionLogAttempt;
 
 class LeadController extends Controller
 {
@@ -35,93 +34,61 @@ class LeadController extends Controller
 
         if(!$endpointHelper->hasReceivers($endpoint))
         {
+            Log::info('No receivers');
             return response('No receivers set', 403);
         }
 
         if(!$endpointHelper->verifiedRequest($endpoint, $request))
         {
+            Log::info('Not Verified Request');
             return response('Not Verified Request', 403);
         }
         
-        $data_array = json_decode($request->getContent(), true);
-        Log::info($data_array);
+        $data = json_decode($request->getContent(), true);
 
-        $endpointsReceivers = $endpoint->receiversendpoints;
+        $logId = $endpointHelper->createLogData($endpoint, $data);
 
-        // $logMessage = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        Log::info('$logId:' . $logId);
 
-        $log_id = $endpointHelper->createLogData($endpoint, $request->getContent());
+        $connections = $endpoint->connections;
 
-        // foreach($endpointsReceivers as $endpointReceiver)
-        // {
-        //     $logReceiverMessage = print_r($data, true);
-        //     $sendData = [
-        //         "Campaign_id" => "FB_45678_Taigo_01",
-        //         "Leadid" => "56547ΓΔΦΓ1128",
-        //         "FName" => "Anna",
-        //         "LastName" => "Kotzamani",
-        //         "LeadDate" => "12/9/2023",
-        //         "Email" => "anakot@kosmocar.gr",
-        //         "Mobile" => "6946325145",
-        //         "Brand" => "vw",
-        //         "Model" => "Taigo",
-        //         "DealerCode" => "501",
-        //         "ContactReason" => "Offer",
-        //         "Regnum" => "YMH7945",
-        //         // "Campaign_id" => $data->campaign_id,
-        //         // "Leadid" => $data->lead_id,
-        //         // "FName" => $data->user_column_data->FULL_NAME,
-        //         // "LastName" => $data->user_column_data->FULL_NAME,
-        //         // "LeadDate" => "12/9/2023",
-        //         // "Email" => $data->user_column_data->FULL_NAME,
-        //         // "Mobile" => $data->user_column_data->FULL_NAME,
-        //         // "Model" => $data->user_column_data->FULL_NAME,
-        //         // "DealerCode" => "501",
-        //         // "ContactReason" => "Offer",
-        //         // "Regnum" => "YMH7945"
-        //     ];
+        Log::info('Connections: ' . $connections);
 
-        //     $sendDataSaved = json_encode($sendData, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        foreach($connections as $connection)
+        {
+            $transformedData = $endpointHelper->transformData($data, $logId);
+            
+            $connectionLog = $endpointHelper->createConnectionLog($connection, $transformedData, $logId);
 
-        //     $logReceiver = LogReceiver::create([
-        //         'log_id'                 => $log_id,
-        //         'endpoints_receivers_id' => $endpointReceiver->id,
-        //         'status'                 => LogReceiver::STATUS_PENDING,
-        //         'transformed_data'       => $sendDataSaved,
-        //     ]);
+            $headerUsername = $connection->receiver->auth_data['Username'];
+            $headerPassword = $connection->receiver->auth_data['Password'];
+            
+            $response = Http::withHeaders([
+                'Username' => $headerUsername,
+                'Password' => $headerPassword,
+            ])->post($connection->receiver->url, $transformedData);
 
-        //     Log::info($logReceiver);
+            $connectionLogAttempt = ConnectionLogAttempt::create([
+                'connections_logs_id' => $connectionLog->id,
+                'status_code' => $response->status(),
+                'response' => $response,
+            ]);
 
-        //     $headerUsername = $endpointReceiver->receiver->auth_data['Username'];
-        //     $headerPassword = $endpointReceiver->receiver->auth_data['Password'];
+            Log::info('$connectionLogAttempt:' . $connectionLogAttempt);
 
-        //     $response = Http::withHeaders([
-        //         'Username' => $headerUsername,
-        //         'Password' => $headerPassword,
-        //     ])->post($endpointReceiver->receiver->url, $sendData);
+            if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
+            {
+                $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
+            }
+            else
+            {
+                $connectionLog->status = ConnectionLog::STATUS_FAIL;
+            }
 
-        //     $logReceiverAttempt = LogReceiverAttempt::create([
-        //         'logs_receivers_id' => $logReceiver->id,
-        //         'status_code' => $response->status(),
-        //         'response' => $response
-        //     ]);
+            $connectionLog->saveQuietly();
 
-        //     Log::info($response->status());
-
-        //     if(in_array($response->status(), LogReceiverAttempt::STATUS_SUCCESS))
-        //     {
-        //         $logReceiver->status = LogReceiver::STATUS_SUCCESS;
-        //     }
-        //     else
-        //     {
-        //         $logReceiver->status = LogReceiver::STATUS_FAIL;
-        //     }
-
-        //     $logReceiver->saveQuietly();
-
-        //     // $log_receiver = LogReceiver::find($log_receiver_id);
-        //     // SendLog::dispatch($log_receiver);
-        // }
+            Log::info('$connectionLog FINAL:' . $connectionLog);
+        }
 
         return response()->json(['status' => 'success']);
     }
