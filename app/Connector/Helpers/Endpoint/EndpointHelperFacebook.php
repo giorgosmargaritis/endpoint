@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Connector\Helpers\Endpoint;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use App\Models\ConnectionLog;
 use App\Models\Log as Logmodel;
 use App\Models\LogDataFacebook;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
@@ -67,21 +68,45 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
     public function transformData($data, $logId)
     {
         $dataRequested = json_decode(LogDataFacebook::where('log_id', '=', $logId)->first()->data_requested, true);
+        $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
         $leadDate = (string) Logmodel::find($logId)->created_at;
-        Log::info('LeadDate: ' . $leadDate);
+        
+        if(array_key_exists('entry', $data) &&
+            array_key_exists('changes', $data['entry']) &&
+            array_key_exists('value', $data['entry']['changes']) &&
+            array_key_exists('ad_id', $data['entry']['changes']['value']))
+        {
+            $campaignID = $data['entry']['changes']['value']['ad_id'];
+        }
+        else
+        {
+            $campaignID = '';
+            Log::info('Log with $logId: ' . $logId . ' has no ad_id');
+        }
+
+        if(array_key_exists('id', $dataRequested))
+        {
+            $leadID = $dataRequested['id'];
+        }
+        else
+        {
+            $leadID = '';
+            Log::info('Log with $logId: ' . $logId . ' has no leadID');
+        }
+
         $transformedData = [
-            "Campaign_id" => "",
-            "Leadid" => $dataRequested['id'],
-            "FName" => $dataRequested['field_data'][6]['values'][0],
-            "LastName" => $dataRequested['field_data'][7]['values'][0],
+            "Campaign_id" => (string)$campaignID,
+            "Leadid" => (string)$leadID,
+            "FName" =>  $this->map('FName', $dataToSearch),// $dataRequested['field_data'][6]['values'][0],
+            "LastName" => $this->map('LastName', $dataToSearch),// $dataRequested['field_data'][7]['values'][0],
             "LeadDate" => $leadDate,
-            "Email" => $dataRequested['field_data'][9]['values'][0],
-            "Mobile" => "6970707070",
-            "Brand" => $dataRequested['field_data'][1]['values'][0],
-            "Model" => $dataRequested['field_data'][0]['values'][0],
-            "DealerCode" => $dataRequested['field_data'][2]['values'][0],
-            "ContactReason" => $dataRequested['field_data'][3]['values'][0],
-            "Regnum" => $dataRequested['field_data'][5]['values'][0],
+            "Email" => $this->map('Email', $dataToSearch),// $dataRequested['field_data'][9]['values'][0],
+            "Mobile" => $this->map('Mobile', $dataToSearch),
+            "Brand" => $this->map('Brand', $dataToSearch),
+            "Model" => $this->map('Model', $dataToSearch),
+            "DealerCode" => $this->map('DealerCode', $dataToSearch),
+            "ContactReason" => $this->map('ContactReason', $dataToSearch),
+            "Regnum" => $this->map('Regnum', $dataToSearch),
         ];
         
         return $transformedData;
@@ -101,5 +126,41 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         ]);
 
         return $connectionLog;
+    }
+
+    private function map($key, $data): string
+    {
+        $map = [
+            "FName" => "FNAME",
+            "LastName" => "LASTNAME",
+            "Email" => "EMAIL",
+            "Mobile" => "MOBILE",
+            "Brand" => "BRAND",
+            "Model" => "MODEL",
+            "DealerCode" => "DEALERCODE",
+            "ContactReason" => "CONTACTREASON",
+            "Engine" => "ENGINE",
+            "Regnum" => "REGNUM",
+        ];
+
+        foreach($data as $d)
+        {
+            if($map[$key] === $d['name'])
+            {
+                return $d['values'][0];
+            }
+        }
+
+        return "";
+    }
+
+    private function uppercaseNameValues($data)
+    {
+        foreach($data as &$d)
+        {
+            $d['name'] = Str::upper($d['name']);
+        }
+
+        return $data;
     }
 }

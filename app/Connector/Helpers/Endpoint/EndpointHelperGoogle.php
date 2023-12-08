@@ -5,6 +5,7 @@ namespace App\Connector\Helpers\Endpoint;
 use App\Models\ConnectionLog;
 use App\Models\Log as Logmodel;
 use App\Models\LogDataGoogle;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 class EndpointHelperGoogle extends AbstractEndpointHelper
@@ -54,14 +55,34 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
     public function transformData($data, $logId)
     {
         $leadDate = (string) Logmodel::find($logId)->created_at;
-        $dataToSearch = $data['user_column_data'];
+        $dataToSearch = $this->uppercaseColumnIdValues($data['user_column_data']);
         $explodedString = explode('_', $data['google_key']);
         $brand = array_key_exists(1, $explodedString) ? $explodedString[1] : '';
         $model = array_key_exists(2, $explodedString) ? $explodedString[2] : $this->map('Model', $dataToSearch);
         
+        if(array_key_exists('campaign_id', $data))
+        {
+            $campaignID = $data['campaign_id'];
+        }
+        else
+        {
+            $campaignID = '';
+            Log::info('Log with $logId: ' . $logId . ' has no campaign_id');
+        }
+
+        if(array_key_exists('lead_id', $data))
+        {
+            $leadID = $data['lead_id'];
+        }
+        else
+        {
+            $leadID = '';
+            Log::info('Log with $logId: ' . $logId . ' has no lead_id');
+        }
+
         $transformedData = [
-            "Campaign_id" => (string)$data['campaign_id'],
-            "Leadid" => $data['lead_id'],
+            "Campaign_id" => (string)$campaignID,
+            "Leadid" => (string)$leadID,
             "FName" => $this->map('FName', $dataToSearch),
             "LastName" => $this->map('LastName', $dataToSearch),
             "LeadDate" => $leadDate,
@@ -107,10 +128,10 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
             "LastName" => "LAST_NAME",
             "Email" => "EMAIL",
             "Mobile" => "PHONE_NUMBER",
-            "Model" => "ποιο_μοντέλο_σάς_ενδιαφέρει;",
-            "DealerCode" => "ποια_αντιπροσωπεία_προτιμάτε;",
-            "ContactReason" => "ποια_υπηρεσία_σάς_ενδιαφέρει;",
-            "Engine" => "ποιος_τύπος_οχήματος_σας_ενδιαφέρει;",
+            "Model" => "ΠΟΙΟ_ΜΟΝΤΕΛΟ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
+            "DealerCode" => "ΠΟΙΑ_ΑΝΤΙΠΡΟΣΩΠΕΙΑ_ΠΡΟΤΙΜΑΤΕ;",
+            "ContactReason" => "ΠΟΙΑ_ΥΠΗΡΕΣΙΑ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
+            "Engine" => "ΠΟΙΟΣ_ΤΥΠΟΣ_ΟΧΗΜΑΤΟΣ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
         ];
 
         foreach($data as $d)
@@ -122,5 +143,22 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
         }
 
         return "";
+    }
+
+    private function uppercaseColumnIdValues($data): array
+    {
+        $greek = array(
+            'Ά', 'Ί', 'Ύ', 'Έ', 'Ό', 'Ή', 'Ώ', 'Ϊ', 'Ϋ',
+        );
+        $simpleGreek = array(
+            'Α', 'Ι', 'Υ', 'Ε', 'Ο', 'Η', 'Ω', 'Ι', 'Υ',
+        );
+        foreach($data as &$d)
+        {
+            $d['column_id'] = Str::upper($d['column_id']);
+            $d['column_id'] = Str::replace($greek, $simpleGreek, $d['column_id']);
+        }
+
+        return $data;
     }
 }
