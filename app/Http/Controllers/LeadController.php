@@ -47,8 +47,11 @@ class LeadController extends Controller
         $data = json_decode($request->getContent(), true);
 
         $logId = $endpointHelper->createLogData($endpoint, $data);
-
         Log::info('$logId:' . $logId);
+        if($logId === -1)
+        {
+            return response('LeagenID exists', 200);
+        }
 
         $connections = $endpoint->connections;
 
