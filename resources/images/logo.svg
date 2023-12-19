@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 175 37">
+ <defs>
+  <radialGradient cx="-4.619%" cy="6.646%" fx="-4.619%" fy="6.646%" gradientTransform="matrix(.8299 .53351 -.5579 .79363 .03 .038)" id="a" r="101.342%">
+   <stop offset="0%" stop-color="#00FFC4"></stop>
+   <stop offset="100%" stop-color="#00E1FF"></stop>
+  </radialGradient>
+ </defs>
+ <g class="layer">
+  <title>Layer 1</title>
+  <g fill="none" fill-rule="nonzero" id="svg_1" transform="matrix(1 0 0 1 0 0)">
+   <path d="m30.34,9.99a14.76,14.76 0 0 1 0.05,20.97a18.38,18.38 0 0 1 -13.02,5.37a18.38,18.38 0 0 1 -14.1,-6.54c7.21,5.95 17.95,5.58 24.71,-1.12a11.48,11.48 0 0 0 0,-16.34c-4.56,-4.52 -11.95,-4.52 -16.51,0a4.92,4.92 0 0 0 0,7a5.04,5.04 0 0 0 7.08,0a1.68,1.68 0 0 1 2.36,0a1.64,1.64 0 0 1 0,2.34a8.4,8.4 0 0 1 -11.8,0a8.2,8.2 0 0 1 0,-11.68c5.87,-5.8 15.37,-5.8 21.23,0zm-12.97,-9.99a18.38,18.38 0 0 1 14.1,6.54c-7.21,-5.96 -17.95,-5.58 -24.71,1.11l0,0.01a11.48,11.48 0 0 0 0,16.34c4.55,4.52 11.95,4.52 16.51,0a4.92,4.92 0 0 0 0,-7a5.04,5.04 0 0 0 -7.08,0a1.68,1.68 0 0 1 -2.36,0a1.64,1.64 0 0 1 0,-2.34a8.4,8.4 0 0 1 11.8,0a8.2,8.2 0 0 1 0,11.68c-5.87,5.8 -15.37,5.8 -21.24,0a14.76,14.76 0 0 1 -0.01,-21a18.38,18.38 0 0 1 12.99,-5.34z" fill="url(#a)" id="svg_2"></path>
+  </g>
+  <text class="fill-current text-gray-600 dark:text-white" fill="" font-family="Helvetica" font-size="26" letter-spacing="0" stroke-width="0" x="107.23" xml:space="preserve" y="27.5" font-weight="bold" text-anchor="middle" stroke="#000000" id="svg_4">Connector</text>
+ </g>
+</svg>
