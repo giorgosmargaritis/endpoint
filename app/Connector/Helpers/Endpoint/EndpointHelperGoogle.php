@@ -57,7 +57,7 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
         $leadDate = (string) Logmodel::find($logId)->created_at;
         $dataToSearch = $this->uppercaseColumnIdValues($data['user_column_data']);
         $explodedString = explode('_', $data['google_key']);
-        $brand = array_key_exists(1, $explodedString) ? $explodedString[1] : '';
+        $brand = array_key_exists(1, $explodedString) ? $explodedString[1] : $this->map('Brand', $dataToSearch);;
         $model = array_key_exists(2, $explodedString) ? $explodedString[2] : $this->map('Model', $dataToSearch);
         
         if(array_key_exists('campaign_id', $data))
@@ -92,7 +92,7 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
             "Model" => $model,
             "DealerCode" => $this->map('DealerCode', $dataToSearch),
             "ContactReason" => $this->map('ContactReason', $dataToSearch),
-            "Regnum" => "",
+            "Regnum" => $this->map('Regnum', $dataToSearch),
             "Engine" => $this->map('Engine', $dataToSearch),
         ];
 
@@ -128,9 +128,11 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
             "LastName" => "LAST_NAME",
             "Email" => "EMAIL",
             "Mobile" => "PHONE_NUMBER",
+            "Brand" => "",
             "Model" => "ΠΟΙΟ_ΜΟΝΤΕΛΟ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
             "DealerCode" => "ΠΟΙΑ_ΑΝΤΙΠΡΟΣΩΠΕΙΑ_ΠΡΟΤΙΜΑΤΕ;",
             "ContactReason" => "ΠΟΙΑ_ΥΠΗΡΕΣΙΑ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
+            "Regnum" => "REGNUM",
             "Engine" => "ΠΟΙΟΣ_ΤΥΠΟΣ_ΟΧΗΜΑΤΟΣ_ΣΑΣ_ΕΝΔΙΑΦΕΡΕΙ;",
         ];
 
