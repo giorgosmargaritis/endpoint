@@ -52,7 +52,7 @@ class LeadController extends Controller
         {
             return response('LeagenID exists', 200);
         }
-
+        
         $connections = $endpoint->connections;
 
         Log::info('Connections: ' . $connections);

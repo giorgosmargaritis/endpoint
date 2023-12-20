@@ -25,7 +25,6 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
             return true;
         }
-        
 
         // case of POST request method, check if the endpoint is already verified
         if(request()->isMethod('POST'))
@@ -40,10 +39,11 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $logMessage = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
         
         $leadGenId = $data['entry'][0]['changes'][0]['value']['leadgen_id'];
+        Log::info('LeagenId: ' . $leadGenId);
         $leadID = ConnectionLog::where('leadgen_id', $leadGenId)->get();
 
         // log model is not created when leadid already exists
-        if($leadID)
+        if($leadID->isNotEmpty())
         {
             return -1;
         }
@@ -52,10 +52,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             'log_type' => Logmodel::LOG_TYPE_FACEBOOK,
         ]);
 
-        $leadGenId = $data['entry'][0]['changes'][0]['value']['leadgen_id'];
-        Log::info('LeagenId: ' . $leadGenId);
-        $accessToken = 'EAAOh2q176B0BO7pztwZCmmhkwlVYaTWThDLBzwcBEqkL4LVs7fj218XQ4x7ZA5GMStc1g9waS5JWHTxDQZCdQgNicxEkB9R6VjAile70XMy9sZCNge36m7YBDW0lv6QYdLsO2ZA0ViZBSvqEtRBuvZBVGC3G5ZA433xuiZCnG5VqdZAd1ZATTME7XSLIlC4KuElfPkZD';
-        // original $accessToken = 'EAAJg0XJD27IBOZCnFvl9i7MkOWTOL2gfyFWk2XZCuRxlaNDvEJnod6aX3PwM3TT0uN4j4AuVgK1zSfLZCe9Kpr2NpFXSC2Vj1yn8Hn2PjcnjrrmznYJjo1T38f7aRHUaebUcOqq2kZBRe96kxnOh0UamxboSBBIGLXhhCCOdH2LEZAQWJoD8ZAbFpUEsuEZCK8ZD';
+        $accessToken = 'EAAJg0XJD27IBOZCnFvl9i7MkOWTOL2gfyFWk2XZCuRxlaNDvEJnod6aX3PwM3TT0uN4j4AuVgK1zSfLZCe9Kpr2NpFXSC2Vj1yn8Hn2PjcnjrrmznYJjo1T38f7aRHUaebUcOqq2kZBRe96kxnOh0UamxboSBBIGLXhhCCOdH2LEZAQWJoD8ZAbFpUEsuEZCK8ZD';
         $response = Http::get('https://graph.facebook.com/' . $leadGenId . '/', [
             'access_token' => $accessToken
         ]);
@@ -107,10 +104,10 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $transformedData = [
             "Campaign_id" => (string)$campaignID,
             "Leadid" => (string)$leadID,
-            "FName" =>  $this->map('FName', $dataToSearch),// $dataRequested['field_data'][6]['values'][0],
-            "LastName" => $this->map('LastName', $dataToSearch),// $dataRequested['field_data'][7]['values'][0],
+            "FName" =>  $this->map('FName', $dataToSearch),
+            "LastName" => $this->map('LastName', $dataToSearch),
             "LeadDate" => $leadDate,
-            "Email" => $this->map('Email', $dataToSearch),// $dataRequested['field_data'][9]['values'][0],
+            "Email" => $this->map('Email', $dataToSearch),
             "Mobile" => $this->map('Mobile', $dataToSearch),
             "Brand" => $this->map('Brand', $dataToSearch),
             "Model" => $this->map('Model', $dataToSearch),
