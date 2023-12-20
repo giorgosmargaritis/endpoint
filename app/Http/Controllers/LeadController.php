@@ -44,13 +44,14 @@ class LeadController extends Controller
             return response('Not Verified Request', 403);
         }
         
+        Log::info('--- Procedure started ---');
         $data = json_decode($request->getContent(), true);
 
         $logId = $endpointHelper->createLogData($endpoint, $data);
         Log::info('$logId:' . $logId);
         if($logId === -1)
         {
-            return response('LeagenID exists', 200);
+            return response('LeadgenID exists', 200);
         }
         
         $connections = $endpoint->connections;
@@ -92,7 +93,8 @@ class LeadController extends Controller
 
             Log::info('$connectionLog FINAL:' . $connectionLog);
         }
-        Log::info('--- Communication finished ---');
+        Log::info('--- Procedure finished ---');
+
         return response()->json(['status' => 'success']);
     }
 

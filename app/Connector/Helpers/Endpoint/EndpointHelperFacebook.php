@@ -45,6 +45,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         // log model is not created when leadid already exists
         if($leadID->isNotEmpty())
         {
+            Log::info('LeadgenId ' . $leadGenId . ' already exists.');
             return -1;
         }
 
