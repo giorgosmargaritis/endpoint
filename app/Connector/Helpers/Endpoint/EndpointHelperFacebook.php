@@ -52,7 +52,8 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             'log_type' => Logmodel::LOG_TYPE_FACEBOOK,
         ]);
 
-        $accessToken = 'EAAJg0XJD27IBOZCnFvl9i7MkOWTOL2gfyFWk2XZCuRxlaNDvEJnod6aX3PwM3TT0uN4j4AuVgK1zSfLZCe9Kpr2NpFXSC2Vj1yn8Hn2PjcnjrrmznYJjo1T38f7aRHUaebUcOqq2kZBRe96kxnOh0UamxboSBBIGLXhhCCOdH2LEZAQWJoD8ZAbFpUEsuEZCK8ZD';
+        $accessToken = $endpoint->page_access_token;
+        Log::info('$accessToken: ' . $accessToken);
         $response = Http::get('https://graph.facebook.com/' . $leadGenId . '/', [
             'access_token' => $accessToken
         ]);
