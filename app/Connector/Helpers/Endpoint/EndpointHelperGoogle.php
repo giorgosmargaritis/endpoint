@@ -37,6 +37,17 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
         $logData = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
 
         Log::info('$logData Pretty: ' . $logData);
+
+        $leadGenId = $data['lead_id'];
+
+        $leadID = ConnectionLog::where('leadgen_id', $leadGenId)->get();
+
+        // log model is not created when leadid already exists
+        if($leadID->isNotEmpty())
+        {
+            Log::info('LeadgenId ' . $leadGenId . ' already exists.');
+            return -1;
+        }
         
         $log = Logmodel::create([
             'log_type' => Logmodel::LOG_TYPE_GOOGLE
