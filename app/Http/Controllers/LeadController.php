@@ -92,7 +92,7 @@ class LeadController extends Controller
 
             Log::info('$connectionLog FINAL:' . $connectionLog);
         }
-
+        Log::info('--- Communication finished ---');
         return response()->json(['status' => 'success']);
     }
 
