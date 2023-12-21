@@ -170,6 +170,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         foreach($data as &$d)
         {
             $d['name'] = Str::upper($d['name']);
+            $d['name'] = Str::replace(' ', '', $d['column_id']);
         }
 
         return $data;
