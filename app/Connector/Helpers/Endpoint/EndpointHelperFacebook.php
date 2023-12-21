@@ -110,7 +110,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             "LastName"      => $this->map('LastName', $dataToSearch),
             "LeadDate"      => $leadDate,
             "Email"         => $this->map('Email', $dataToSearch),
-            "Mobile"        => $this->map('Mobile', $dataToSearch),
+            "Mobile"        => substr($this->map('Mobile', $dataToSearch), 0, 18),
             "Brand"         => $this->map('Brand', $dataToSearch),
             "Model"         => $this->map('Model', $dataToSearch),
             "DealerCode"    => $this->map('DealerCode', $dataToSearch),
