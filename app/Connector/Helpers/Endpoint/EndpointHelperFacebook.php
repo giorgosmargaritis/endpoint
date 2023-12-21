@@ -104,7 +104,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         }
 
         $transformedData = [
-            "Campaign_id"   => (string)$campaignID,
+            "Campaign_id"   => $this->map('Campaign', $dataToSearch),
             "Leadid"        => (string)$leadID,
             "FName"         => $this->map('FName', $dataToSearch),
             "LastName"      => $this->map('LastName', $dataToSearch),
