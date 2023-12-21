@@ -141,6 +141,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
     private function map($key, $data): string
     {
         $map = [
+            "Campaign" => "CAMPAIGN",
             "FName" => "FNAME",
             "LastName" => "LASTNAME",
             "Email" => "EMAIL",
