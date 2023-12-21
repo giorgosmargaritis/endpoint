@@ -40,13 +40,16 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
 
         $leadGenId = $data['lead_id'];
 
-        $leadID = ConnectionLog::where('leadgen_id', $leadGenId)->get();
-
-        // log model is not created when leadid already exists
-        if($leadID->isNotEmpty())
+        if(!$data['is_test'])
         {
-            Log::info('LeadgenId ' . $leadGenId . ' already exists.');
-            return -1;
+            $leadID = ConnectionLog::where('leadgen_id', $leadGenId)->get();
+
+            // log model is not created when leadid already exists
+            if($leadID->isNotEmpty())
+            {
+                Log::info('LeadgenId ' . $leadGenId . ' already exists.');
+                return -1;
+            }
         }
         
         $log = Logmodel::create([
