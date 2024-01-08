@@ -51,7 +51,13 @@ class LeadController extends Controller
         Log::info('$logId:' . $logId);
         if($logId === -1)
         {
+            Log::info('--- Procedure finished ---');
             return response('LeadgenID exists', 200);
+        }
+        if($logId === -2)
+        {
+            Log::info('--- Procedure finished ---');
+            return response('No data was requested succesfully', 200);
         }
         
         $connections = $endpoint->connections;

@@ -62,14 +62,27 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         Log::info('data_received: ' . $logMessage);
         Log::info('data_requested: ' . $response);
 
+        $dataRequestedStatus = 1;
+        $dataRequested = json_decode($response, true);
+
+        if(array_key_exists('error', $dataRequested))
+        {
+            $dataRequestedStatus = 2;
+        }
+
         $log_data_facebook = LogDataFacebook::create([
             'log_id' => $log->id,
             'data_received' => $logMessage,
             'data_requested' => $response,
-            'data_requested_status' => 1,
+            'data_requested_status' => $dataRequestedStatus,
         ]);
 
         Log::info('Log Data Facebook Saved: ' . $log_data_facebook);
+
+        if($dataRequestedStatus == 2)
+        {
+            return -2;
+        }
 
         return (int) $log->id;
     }
