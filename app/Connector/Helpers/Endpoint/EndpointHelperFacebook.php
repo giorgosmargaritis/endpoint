@@ -76,8 +76,13 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
     public function transformData($data, $logId)
     {
+        $dataToSearch = [];
         $dataRequested = json_decode(LogDataFacebook::where('log_id', '=', $logId)->first()->data_requested, true);
-        $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
+        if(array_key_exists('field_data', $dataRequested))
+        {
+            $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
+        }
+        
         $leadDate = (string) Logmodel::find($logId)->created_at;
         
         if(array_key_exists('entry', $data) &&
