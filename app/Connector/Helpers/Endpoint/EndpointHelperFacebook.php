@@ -120,6 +120,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         if(array_key_exists('error', $dataRequested))
         {
+            Log::info('DATA RECEIVED: ' . $dataReceived);
             $leadID = $dataReceived['entry']['changes']['value']['leadgen_id'];
 
             $transformedData = [
