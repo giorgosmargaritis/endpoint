@@ -87,7 +87,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $dataToSearch = [];
         $logDataFacebook = LogDataFacebook::where('log_id', '=', $logId)->first();
         $dataRequested = json_decode($logDataFacebook->data_requested, true);
-        $dataReceived = json_decode($logDataFacebook->data_received, true);
+        $dataReceived = json_decode($logDataFacebook->data_received);
         if(array_key_exists('field_data', $dataRequested))
         {
             $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
@@ -120,7 +120,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         if(array_key_exists('error', $dataRequested))
         {
-            $leadID = $data['entry']['changes']['value']['leadgen_id'];
+            Log::info('DATA RECEIVED: ' . $dataReceived);
 
             $transformedData = [
                 "Leadid" => (string)$leadID,
