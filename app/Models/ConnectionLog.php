@@ -14,6 +14,7 @@ class ConnectionLog extends Model
     const STATUS_FAIL = 0;
     const STATUS_SUCCESS = 1;
     const STATUS_PENDING = 2;
+    const STATUS_FAIL_FROM_FACEBOOK = 4;
 
     protected $table = 'connections_logs';
 

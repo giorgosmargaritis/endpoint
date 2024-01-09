@@ -62,12 +62,12 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         Log::info('data_received: ' . $logMessage);
         Log::info('data_requested: ' . $response);
 
-        $dataRequestedStatus = 1;
+        $dataRequestedStatus = LogDataFacebook::DATA_REQUESTED_STATUS_SUCCESS;
         $dataRequested = json_decode($response, true);
 
         if(array_key_exists('error', $dataRequested))
         {
-            $dataRequestedStatus = 2;
+            $dataRequestedStatus = LogDataFacebook::DATA_REQUESTED_STATUS_FAIL;
         }
 
         $log_data_facebook = LogDataFacebook::create([
@@ -79,18 +79,15 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         Log::info('Log Data Facebook Saved: ' . $log_data_facebook);
 
-        if($dataRequestedStatus == 2)
-        {
-            return -2;
-        }
-
         return (int) $log->id;
     }
 
     public function transformData($data, $logId)
     {
         $dataToSearch = [];
-        $dataRequested = json_decode(LogDataFacebook::where('log_id', '=', $logId)->first()->data_requested, true);
+        $logDataFacebook = LogDataFacebook::where('log_id', '=', $logId)->first();
+        $dataRequested = json_decode($logDataFacebook->data_requested, true);
+        $dataReceived = json_decode($logDataFacebook->data_received, true);
         if(array_key_exists('field_data', $dataRequested))
         {
             $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
@@ -121,6 +118,17 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             Log::info('Log with $logId: ' . $logId . ' has no leadID');
         }
 
+        if(array_key_exists('error', $dataRequested))
+        {
+            $leadID = $dataReceived['entry']['changes']['value']['leadgen_id'];
+
+            $transformedData = [
+                "Leadid" => (string)$leadID,
+            ];
+
+            return $transformedData;
+        }
+
         $transformedData = [
             "Campaign_id"   => $this->map('Campaign', $dataToSearch),
             "Leadid"        => (string)$leadID,
@@ -142,15 +150,23 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
     public function createConnectionLog($connection, $transformedData, $logId)
     {
+        $leadGenId = $transformedData['Leadid'];
+        $campaignID = array_key_exists('Campaign_id', $transformedData) ? $transformedData['Campaign_id'] : '';
         $connectionLogData = json_encode($transformedData, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        $status = ConnectionLog::STATUS_PENDING;
+        if(count($transformedData) == 1)
+        {
+            $connectionLogData = 'NO DATA';
+            $status = ConnectionLog::STATUS_FAIL_FROM_FACEBOOK;
+        }
 
         $connectionLog = ConnectionLog::create([
             'connection_id' => $connection->id,
             'log_id' => $logId,
-            'campaign_id' => $transformedData['Campaign_id'],
-            'leadgen_id' => $transformedData['Leadid'],
+            'campaign_id' => $campaignID,
+            'leadgen_id' => $leadGenId,
             'transformed_data' => $connectionLogData,
-            'status' => ConnectionLog::STATUS_PENDING,
+            'status' => $status,
         ]);
 
         return $connectionLog;

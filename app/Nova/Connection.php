@@ -48,7 +48,7 @@ class Connection extends Resource
             ID::make()->sortable(),
             BelongsTo::make('Endpoint', 'endpoint', 'App\Nova\Endpoint'),
             BelongsTo::make('Receiver', 'receiver', 'App\Nova\Receiver'),
-            HasMany::make('Logs', 'connectionslogs', 'App\Nova\ConnectionLog'),
+            HasMany::make('Connection Logs', 'connectionslogs', 'App\Nova\ConnectionLog'),
         ];
     }
 

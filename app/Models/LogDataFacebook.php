@@ -10,6 +10,9 @@ class LogDataFacebook extends Model
 {
     use HasFactory;
 
+    const DATA_REQUESTED_STATUS_SUCCESS = 1;
+    const DATA_REQUESTED_STATUS_FAIL = 2;
+
     protected $table = 'log_data_facebook';
 
     /**
