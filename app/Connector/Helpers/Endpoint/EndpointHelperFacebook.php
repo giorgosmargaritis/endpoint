@@ -89,23 +89,19 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $dataRequested = json_decode($logDataFacebook->data_requested, true);
         $dataReceived = json_decode($logDataFacebook->data_received);
 
-        Log::info('$data' . $data);
-        Log::info('$dataRequested' . $dataRequested);
-        Log::info('$dataReceived' . $dataReceived);
-
         if(array_key_exists('field_data', $dataRequested))
         {
             $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
         }
         
         $leadDate = (string) Logmodel::find($logId)->created_at;
-        
+        $data['entry'][0]['changes'][0]['value']['leadgen_id'];
         if(array_key_exists('entry', $data) &&
-            array_key_exists('changes', $data['entry']) &&
-            array_key_exists('value', $data['entry']['changes']) &&
-            array_key_exists('ad_id', $data['entry']['changes']['value']))
+            array_key_exists('changes', $data['entry'][0]) &&
+            array_key_exists('value', $data['entry'][0]['changes'][0]) &&
+            array_key_exists('ad_id', $data['entry'][0]['changes'][0]['value']))
         {
-            $campaignID = $data['entry']['changes']['value']['ad_id'];
+            $campaignID = $data['entry'][0]['changes'][0]['value']['ad_id'];
         }
         else
         {
@@ -125,8 +121,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         if(array_key_exists('error', $dataRequested))
         {
-            Log::info('DATA RECEIVED: ' . $dataReceived);
-
+            $leadID = $data['entry'][0]['changes'][0]['value']['leadgen_id'];
             $transformedData = [
                 "Leadid" => (string)$leadID,
             ];
