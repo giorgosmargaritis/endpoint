@@ -88,6 +88,11 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $logDataFacebook = LogDataFacebook::where('log_id', '=', $logId)->first();
         $dataRequested = json_decode($logDataFacebook->data_requested, true);
         $dataReceived = json_decode($logDataFacebook->data_received);
+
+        Log::info('$data' . $data);
+        Log::info('$dataRequested' . $dataRequested);
+        Log::info('$dataReceived' . $dataReceived);
+
         if(array_key_exists('field_data', $dataRequested))
         {
             $dataToSearch = $this->uppercaseNameValues($dataRequested['field_data']);
