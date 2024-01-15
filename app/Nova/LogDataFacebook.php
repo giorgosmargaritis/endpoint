@@ -4,7 +4,9 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Connector\Helpers\LogDataFacebookHelper;
 
 class LogDataFacebook extends Resource
 {
@@ -42,7 +44,9 @@ class LogDataFacebook extends Resource
         return [
             Text::make('Data Received','data_received'),
             Text::make('Data Requested','data_requested'),
-            Text::make('Data Requested Status','data_requested_status'),
+            Select::make('Data Requested Status', 'data_requested_status')
+                ->options(LogDataFacebookHelper::getStatuses())
+                ->displayUsingLabels(),
         ];
     }
 
