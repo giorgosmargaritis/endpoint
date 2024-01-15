@@ -65,35 +65,9 @@ class LeadController extends Controller
             
             $connectionLog = $endpointHelper->createConnectionLog($connection, $transformedData, $logId);
 
-            $headerUsername = $connection->receiver->auth_data['Username'];
-            $headerPassword = $connection->receiver->auth_data['Password'];
-            
-            $response = Http::withHeaders([
-                'Username' => $headerUsername,
-                'Password' => $headerPassword,
-            ])->post($connection->receiver->url, $transformedData);
-
-            $connectionLogAttempt = ConnectionLogAttempt::create([
-                'connections_logs_id' => $connectionLog->id,
-                'status_code' => $response->status(),
-                'response' => $response,
-            ]);
-
-            Log::info('$connectionLogAttempt:' . $connectionLogAttempt);
-
-            if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
-            {
-                $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
-            }
-            else
-            {
-                $connectionLog->status = ConnectionLog::STATUS_FAIL;
-            }
-
-            $connectionLog->saveQuietly();
-
-            Log::info('$connectionLog FINAL:' . $connectionLog);
+            $endpointHelper->sendConnectionLog($connectionLog, $connection, $transformedData);
         }
+
         Log::info('--- Procedure finished ---');
 
         return response()->json(['status' => 'success']);

@@ -7,6 +7,7 @@ use App\Models\ConnectionLog;
 use App\Models\Log as Logmodel;
 use App\Models\LogDataFacebook;
 use Illuminate\Support\Facades\Log;
+use App\Models\ConnectionLogAttempt;
 use Illuminate\Support\Facades\Http;
 
 class EndpointHelperFacebook extends AbstractEndpointHelper
@@ -170,6 +171,48 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         ]);
 
         return $connectionLog;
+    }
+
+    public function sendConnectionLog($connectionLog, $connection, $transformedData)
+    {
+        if($connectionLog->status === ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
+        {
+            Log::info('I cannot send.');
+            return false;
+        }
+        Log::info('I will send.');
+        return true;
+        
+        $headerUsername = $connection->receiver->auth_data['Username'];
+        $headerPassword = $connection->receiver->auth_data['Password'];
+        
+        $response = Http::withHeaders([
+            'Username' => $headerUsername,
+            'Password' => $headerPassword,
+        ])->post($connection->receiver->url, $transformedData);
+
+        $connectionLogAttempt = ConnectionLogAttempt::create([
+            'connections_logs_id' => $connectionLog->id,
+            'status_code' => $response->status(),
+            'response' => $response,
+        ]);
+
+        Log::info('$connectionLogAttempt:' . $connectionLogAttempt);
+
+        if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
+        {
+            $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
+        }
+        else
+        {
+            $connectionLog->status = ConnectionLog::STATUS_FAIL;
+        }
+
+        $connectionLog->saveQuietly();
+
+        Log::info('$connectionLog FINAL:' . $connectionLog);
+
+        return true;
     }
 
     private function map($key, $data): string
