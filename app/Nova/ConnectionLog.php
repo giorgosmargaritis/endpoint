@@ -143,7 +143,7 @@ class ConnectionLog extends Resource
         return [
             (new \App\Nova\Actions\SendLog)
                 ->canSee(function ($request) {
-                    if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS)
+                    if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
                     {
                         return true;
                     }
