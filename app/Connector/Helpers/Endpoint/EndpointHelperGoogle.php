@@ -2,11 +2,13 @@
 
 namespace App\Connector\Helpers\Endpoint;
 
-use App\Models\ConnectionLog;
-use App\Models\Log as Logmodel;
-use App\Models\LogDataGoogle;
 use Illuminate\Support\Str;
+use App\Models\ConnectionLog;
+use App\Models\LogDataGoogle;
+use App\Models\Log as Logmodel;
 use Illuminate\Support\Facades\Log;
+use App\Models\ConnectionLogAttempt;
+use Illuminate\Support\Facades\Http;
 
 class EndpointHelperGoogle extends AbstractEndpointHelper
 {
@@ -131,6 +133,40 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
         Log::info('$connectionLog:' . $connectionLog);
 
         return $connectionLog;
+    }
+
+    public function sendConnectionLog($connectionLog, $connection, $transformedData)
+    {        
+        $headerUsername = $connection->receiver->auth_data['Username'];
+        $headerPassword = $connection->receiver->auth_data['Password'];
+        
+        $response = Http::withHeaders([
+            'Username' => $headerUsername,
+            'Password' => $headerPassword,
+        ])->post($connection->receiver->url, $transformedData);
+
+        $connectionLogAttempt = ConnectionLogAttempt::create([
+            'connections_logs_id' => $connectionLog->id,
+            'status_code' => $response->status(),
+            'response' => $response,
+        ]);
+
+        Log::info('$connectionLogAttempt:' . $connectionLogAttempt);
+
+        if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
+        {
+            $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
+        }
+        else
+        {
+            $connectionLog->status = ConnectionLog::STATUS_FAIL;
+        }
+
+        $connectionLog->saveQuietly();
+
+        Log::info('$connectionLog FINAL:' . $connectionLog);
+
+        return true;
     }
 
     private function map($key, $data): string

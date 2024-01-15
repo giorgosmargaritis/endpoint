@@ -177,11 +177,8 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
     {
         if($connectionLog->status === ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
         {
-            Log::info('I cannot send.');
             return false;
         }
-        Log::info('I will send.');
-        return true;
         
         $headerUsername = $connection->receiver->auth_data['Username'];
         $headerPassword = $connection->receiver->auth_data['Password'];
