@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -23,6 +24,7 @@ class RequestFacebookData extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
+        Log::info('Request Facebook Data');
         return Action::message('Data requested successfully!');
     }
 
