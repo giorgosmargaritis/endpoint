@@ -157,9 +157,6 @@ class ConnectionLog extends Resource
                     {
                         return true;
                     }
-                })
-                ->canRun(function ($request) {
-                    return true;
                 }),
         ];
     }
