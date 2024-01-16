@@ -35,6 +35,11 @@ class ConnectionLogPolicy
     public function update(User $user, ConnectionLog $model)
     {
         // Authorization logic for updating a model
+        if($user)
+        {
+            return false;
+        }
+
         return true;
     }
 
