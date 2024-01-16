@@ -141,16 +141,16 @@ class ConnectionLog extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            (new \App\Nova\Actions\SendLog)
-                ->canSee(function ($request) {
-                    if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
-                    {
-                        return true;
-                    }
-                })
-                ->canRun(function ($request) {
-                    return true;
-                }),
+            // (new \App\Nova\Actions\SendLog)
+            //     ->canSee(function ($request) {
+            //         if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
+            //         {
+            //             return true;
+            //         }
+            //     })
+            //     ->canRun(function ($request) {
+            //         return true;
+            //     }),
             (new \App\Nova\Actions\RequestFacebookData)
                 ->canSee(function ($request) {
                     if($this->model()->status === ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
