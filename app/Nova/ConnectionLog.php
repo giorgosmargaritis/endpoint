@@ -151,13 +151,7 @@ class ConnectionLog extends Resource
             //     ->canRun(function ($request) {
             //         return true;
             //     }),
-            (new \App\Nova\Actions\RequestFacebookData)
-                ->canSee(function ($request) {
-                    if($this->model()->status === ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
-                    {
-                        return true;
-                    }
-                }),
+            (new \App\Nova\Actions\RequestFacebookData),
         ];
     }
 }
