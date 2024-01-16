@@ -35,7 +35,7 @@ class ConnectionLogPolicy
     public function update(User $user, ConnectionLog $model)
     {
         // Authorization logic for updating a model
-        return false;
+        return true;
     }
 
     public function delete(User $user, ConnectionLog $model)
