@@ -173,6 +173,33 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         return $connectionLog;
     }
 
+    public function updateConnectionLog($connectionLog, $transformedData)
+    {
+        $leadGenId = $transformedData['Leadid'];
+        $campaignID = array_key_exists('Campaign_id', $transformedData) ? $transformedData['Campaign_id'] : '';
+        $connectionLogData = json_encode($transformedData, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+        $status = ConnectionLog::STATUS_PENDING;
+
+        if(count($transformedData) == 1)
+        {
+            $connectionLogData = 'NO DATA';
+            $status = ConnectionLog::STATUS_FAIL_FROM_FACEBOOK;
+
+            $connectionLog->transformed_data = $connectionLogData;
+            $connectionLog->saveQuietly();
+        }
+
+        $connectionLog->leadgen_id = $leadGenId;
+        $connectionLog->campaign_id = $campaignID;
+        $connectionLog->transformed_data = $connectionLogData;
+        $connectionLog->status = $status;
+
+        $connectionLog->saveQuietly();
+
+        Log::info('$connectionLog: ' . $connectionLog);
+        return $connectionLog;
+    }
+
     public function sendConnectionLog($connectionLog, $connection, $transformedData)
     {
         if($connectionLog->status === ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
@@ -212,7 +239,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         return true;
     }
 
-    public static function requestData($endpoint, $dataReceived)
+    public function requestData($endpoint, $dataReceived)
     {
         $accessToken = $endpoint->page_access_token;
         $dataReceived = json_decode($dataReceived, true);
@@ -222,9 +249,27 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $response = Http::get('https://graph.facebook.com/' . $leadGenId . '/', [
             'access_token' => $accessToken
         ]);
-        return $response;
-        $dataRequested = json_decode($response, true);
 
+        return $response;
+    }
+
+    public function updateRequestedData($dataRequested, $logDataFacebook)
+    {
+        $logDataFacebook->data_requested = $dataRequested;
+
+        $dataRequested = json_decode($dataRequested, true);
+
+        if(array_key_exists('error', $dataRequested))
+        {
+            $logDataFacebook->saveQuietly();
+            Log::info('$dataRequested: ' . $dataRequested);
+            return $dataRequested;
+        }
+
+        $logDataFacebook->status = LogDataFacebook::DATA_REQUESTED_STATUS_SUCCESS;
+        $logDataFacebook->saveQuietly();
+
+        Log::info('$dataRequested: ' . $dataRequested);
         return $dataRequested;
     }
 

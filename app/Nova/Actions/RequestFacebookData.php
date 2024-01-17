@@ -28,13 +28,22 @@ class RequestFacebookData extends Action
     {
         $connectionLog = $models->first();
 
+        $endpointHelperFacebook = new EndpointHelperFacebook();
+
         $endpoint = $connectionLog->connection->endpoint;
         $logID = $connectionLog->log->id;
-        $dataReceived = LogDataFacebook::where('log_id', $logID)->first()->data_received;
+        $logDataFacebook = LogDataFacebook::where('log_id', $logID)->first();
+        $dataReceived = $logDataFacebook->data_received;
 
-        $requestedData = EndpointHelperFacebook::requestData($endpoint, $dataReceived);
+        $requestedData = $endpointHelperFacebook->requestData($endpoint, $dataReceived);
 
         Log::info('data_requested: ' . $requestedData);
+
+        $requestedDataUpdated = $endpointHelperFacebook->updateRequestedData($requestedData, $logDataFacebook);
+
+        $transformedData = $endpointHelperFacebook->transformData($requestedDataUpdated, $logID);
+
+        $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
 
         return Action::message('Data requested successfully!');
     }
