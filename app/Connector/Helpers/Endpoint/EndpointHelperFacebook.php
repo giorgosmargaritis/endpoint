@@ -262,7 +262,6 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         if(array_key_exists('error', $dataRequested))
         {
             $logDataFacebook->saveQuietly();
-            Log::info('$dataRequested: ' . $dataRequested);
             return $dataRequested;
         }
 
