@@ -96,7 +96,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         }
         
         $leadDate = (string) Logmodel::find($logId)->created_at;
-        $data['entry'][0]['changes'][0]['value']['leadgen_id'];
+        
         if(array_key_exists('entry', $data) &&
             array_key_exists('changes', $data['entry'][0]) &&
             array_key_exists('value', $data['entry'][0]['changes'][0]) &&
