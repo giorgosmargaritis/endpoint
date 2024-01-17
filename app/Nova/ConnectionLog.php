@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
+use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Connector\Helpers\ConnectionLogHelper;
 use App\Models\ConnectionLog as ModelsConnectionLog;
@@ -151,7 +152,18 @@ class ConnectionLog extends Resource
                 ->canRun(function ($request) {
                     return true;
                 }),
-            (new \App\Nova\Actions\RequestFacebookData),
+            (new \App\Nova\Actions\RequestFacebookData)
+                ->canSee(function ($request) {
+                    if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS
+                    && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL
+                    && $this->model()->status !== ModelsConnectionLog::STATUS_PENDING)
+                    {
+                        return true;
+                    }
+                })
+                ->canRun(function ($request) {
+                    return true;
+                }),
         ];
     }
 }

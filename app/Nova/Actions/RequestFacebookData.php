@@ -2,6 +2,8 @@
 
 namespace App\Nova\Actions;
 
+use App\Connector\Helpers\Endpoint\EndpointHelperFacebook;
+use App\Models\LogDataFacebook;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,7 +26,16 @@ class RequestFacebookData extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        Log::info('Request Facebook Data');
+        $connectionLog = $models->first();
+
+        $endpoint = $connectionLog->connection->endpoint;
+        $logID = $connectionLog->log->id;
+        $dataReceived = LogDataFacebook::where('log_id', $logID)->first()->data_received;
+
+        $requestedData = EndpointHelperFacebook::requestData($endpoint, $dataReceived);
+
+        Log::info('data_requested: ' . $requestedData);
+
         return Action::message('Data requested successfully!');
     }
 

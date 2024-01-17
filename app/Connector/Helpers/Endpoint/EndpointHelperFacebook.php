@@ -212,6 +212,22 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         return true;
     }
 
+    public static function requestData($endpoint, $dataReceived)
+    {
+        $accessToken = $endpoint->page_access_token;
+        $dataReceived = json_decode($dataReceived, true);
+        $leadGenId = $dataReceived['entry'][0]['changes'][0]['value']['leadgen_id'];
+
+        Log::info('$accessToken: ' . $accessToken);
+        $response = Http::get('https://graph.facebook.com/' . $leadGenId . '/', [
+            'access_token' => $accessToken
+        ]);
+        return $response;
+        $dataRequested = json_decode($response, true);
+
+        return $dataRequested;
+    }
+
     private function map($key, $data): string
     {
         $map = [
