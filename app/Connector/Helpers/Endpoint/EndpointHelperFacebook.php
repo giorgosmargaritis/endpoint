@@ -269,7 +269,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
         $logDataFacebook->status = LogDataFacebook::DATA_REQUESTED_STATUS_SUCCESS;
         $logDataFacebook->saveQuietly();
 
-        Log::info('$dataRequested: ' . $dataRequested);
+        // Log::info('$dataRequested: ' . $dataRequested);
         return $dataRequested;
     }
 
