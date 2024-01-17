@@ -41,8 +41,6 @@ class RequestFacebookData extends Action
         // $requestedData = json_decode($requestedData, true);
 
         $requestedDataUpdated = $endpointHelperFacebook->updateRequestedData($requestedData, $logDataFacebook);
-        Log::info('$requestedDataUpdated: ' . $requestedDataUpdated);
-        exit;
 
         $transformedData = $endpointHelperFacebook->transformData($requestedDataUpdated, $logID);
 
