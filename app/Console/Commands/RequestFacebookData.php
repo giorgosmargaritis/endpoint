@@ -28,12 +28,12 @@ class RequestFacebookData extends Command
      */
     public function handle()
     {
-        $logsForRequestingData = LogDataFacebook::where('data_requested_status', 2)->get();
+        $logsForRequestingData = LogDataFacebook::where('data_requested_status', LogDataFacebook::DATA_REQUESTED_STATUS_FAIL)->get();
         $endpointHelperFacebook = new EndpointHelperFacebook();
 
         foreach($logsForRequestingData as $logForRequestingData)
         {
-            Log::info('$connectionLog->connection: ' . $logForRequestingData->connectionlogs);
+            Log::info('$connectionLog->connection: ' . $logForRequestingData->log);
             // foreach($logForRequestingData->connectionlogs as $connectionLog)
             // {
             //     Log::info('$connectionLog->connection: ' . $connectionLog->connection);
