@@ -3,12 +3,10 @@
 namespace App\Nova;
 
 use App\Models\Log as ModelsLog;
-use DateTime;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\DateTime as FieldsDateTime;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasOne;
-use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Log extends Resource
@@ -64,8 +62,11 @@ class Log extends Resource
                 return ($this->resource->log_type === ModelsLog::LOG_TYPE_GOOGLE);
             }),
 
-            FieldsDateTime::make('Created At')
+            DateTime::make('Created At')
                 ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+
+            DateTime::make('Updated At')
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
         ];
     }
 
