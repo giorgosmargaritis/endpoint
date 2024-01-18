@@ -96,10 +96,10 @@ class ConnectionLog extends Resource
                 ->filterable()
                 ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
 
-                DateTime::make('Updated At')
-                ->exceptOnForms()
-                ->filterable()
-                ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+            DateTime::make('Updated At')
+            ->exceptOnForms()
+            ->filterable()
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
 
             HasMany::make('Attempts', 'connectionlogattempts', 'App\Nova\ConnectionLogAttempt'),
         ];

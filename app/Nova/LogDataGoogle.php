@@ -2,9 +2,10 @@
 
 namespace App\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class LogDataGoogle extends Resource
@@ -42,6 +43,12 @@ class LogDataGoogle extends Resource
     {
         return [
             Text::make('Data Received'),
+
+            DateTime::make('Created At')
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+
+            DateTime::make('Updated At')
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
         ];
     }
 
