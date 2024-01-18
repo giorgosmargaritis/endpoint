@@ -44,11 +44,14 @@ class RequestFacebookData extends Action
 
         $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
 
-        Log::info($connectionLog);
+        $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
 
-        // $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
-
-        return Action::message('Data requested successfully!');
+        if($connectionSent)
+        {
+            return Action::message('Data requested and sent successfully!');
+        }
+        
+        return Action::danger('Data requested successfully but was not sent!');
     }
 
     /**

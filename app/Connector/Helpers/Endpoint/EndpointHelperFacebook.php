@@ -196,7 +196,6 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         $connectionLog->saveQuietly();
 
-        Log::info('$connectionLog: ' . $connectionLog);
         return $connectionLog;
     }
 
