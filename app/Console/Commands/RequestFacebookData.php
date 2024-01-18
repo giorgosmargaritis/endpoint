@@ -4,7 +4,8 @@ namespace App\Console\Commands;
 
 use App\Models\LogDataFacebook;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Log;
+use App\Connector\Helpers\Endpoint\EndpointHelperFacebook;
 
 class RequestFacebookData extends Command
 {
@@ -28,6 +29,19 @@ class RequestFacebookData extends Command
     public function handle()
     {
         $logsForRequestingData = LogDataFacebook::where('data_requested_status', 2)->get();
-        FacadesLog::info($logsForRequestingData);
+        $endpointHelperFacebook = new EndpointHelperFacebook();
+
+        foreach($logsForRequestingData as $logForRequestingData)
+        {
+            foreach($logForRequestingData->connectionlogs as $connectionLog)
+            {
+                Log::info('$connectionLog->connection: ' . $connectionLog->connection);
+            }
+            // $endpoint = $logForRequestingData->connection->endpoint;
+            // $connection = $connectionLog->connection;
+            // $logID = $connectionLog->log->id;
+            // $logDataFacebook = LogDataFacebook::where('log_id', $logID)->first();
+            // $dataReceived = $logDataFacebook->data_received;
+        }
     }
 }
