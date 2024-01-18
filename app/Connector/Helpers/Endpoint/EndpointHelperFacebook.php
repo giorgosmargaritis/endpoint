@@ -122,7 +122,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
 
         if(array_key_exists('error', $dataRequested))
         {
-            $leadID = $data['entry'][0]['changes'][0]['value']['leadgen_id'];
+            $leadID = $data['entry']['changes']['value']['leadgen_id'];
             $transformedData = [
                 "Leadid" => (string)$leadID,
             ];
