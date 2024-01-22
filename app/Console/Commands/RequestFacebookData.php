@@ -34,15 +34,15 @@ class RequestFacebookData extends Command
         foreach($logsForRequestingData as $logForRequestingData)
         {
             Log::info('$connectionLog->connection: ' . $logForRequestingData->log);
-            // foreach($logForRequestingData->connectionlogs as $connectionLog)
-            // {
-            //     Log::info('$connectionLog->connection: ' . $connectionLog->connection);
-            // }
-            // $endpoint = $logForRequestingData->connection->endpoint;
-            // $connection = $connectionLog->connection;
-            // $logID = $connectionLog->log->id;
-            // $logDataFacebook = LogDataFacebook::where('log_id', $logID)->first();
-            // $dataReceived = $logDataFacebook->data_received;
+            foreach($logForRequestingData->connectionlogs as $connectionLog)
+            {
+                Log::info('$connectionLog->connection: ' . $connectionLog->connection);
+            }
+            $endpoint = $logForRequestingData->connection->endpoint;
+            $connection = $connectionLog->connection;
+            $logID = $connectionLog->log->id;
+            $logDataFacebook = LogDataFacebook::where('log_id', $logID)->first();
+            $dataReceived = $logDataFacebook->data_received;
         }
     }
 }
