@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('data_received');
             $table->longText('data_requested')->nullable();
             $table->tinyInteger('data_requested_status')->unsigned()->nullable();
+            $table->integer('times_requested')->unsigned()->default(0);
             $table->timestamps();
 
             $table->foreign('log_id')->references('id')->on('logs')->onDelete('cascade');

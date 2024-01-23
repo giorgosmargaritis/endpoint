@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('leadgen_id')->index('leadgen_id');
             $table->longText('transformed_data');
             $table->tinyInteger('status')->unsigned();
+            $table->boolean('is_test');
             $table->timestamps();
         });
     }
