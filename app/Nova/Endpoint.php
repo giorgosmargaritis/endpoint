@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\MultiSelect;
 use App\Connector\Helpers\EndpointHelper;
 use App\Models\Endpoint as ModelsEndpoint;
+use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Endpoint extends Resource
@@ -62,42 +63,49 @@ class Endpoint extends Resource
             ID::make()->sortable(),
 
             Text::make('Name', 'name')
-                ->rules('required'),
+            ->rules('required'),
 
             Text::make('Webhook Path', 'path')
-                ->rules('required')
-                ->creationRules('unique:endpoints,path')
-                ->displayUsing(function ($value) {
-                    return '{{domain}}/api/webhook/' . $value;
-                }),
+            ->rules('required')
+            ->creationRules('unique:endpoints,path')
+            ->displayUsing(function ($value) {
+                return '{{domain}}/api/webhook/' . $value;
+            }),
 
             Text::make('Token', 'verification_token')
-                ->readonly(function ($request) {
-                    return $request->isUpdateOrUpdateAttachedRequest();
-                })
-                ->default(Str::random(20))
-                ->maxlength(20)
-                ->enforceMaxlength()
-                ->rules('required')
-                ->creationRules('unique:endpoints,verification_token'),
+            ->readonly(function ($request) {
+                return $request->isUpdateOrUpdateAttachedRequest();
+            })
+            ->default(Str::random(20))
+            ->maxlength(20)
+            ->enforceMaxlength()
+            ->rules('required')
+            ->creationRules('unique:endpoints,verification_token'),
+
+            Select::make('Type', 'type')
+            ->options(EndpointHelper::getTypes())
+            ->displayUsingLabels()
+            ->rules('required')
+            ->filterable(),
+
+            URL::make('Documentation', fn () => url('files/facebook/longliveaccesstoken.pdf'))
+            ->onlyOnDetail()
+            ->showOnDetail(function (NovaRequest $request, $resource) {
+                return $this->type === ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK;
+            })
+            ->displayUsing(fn () => "Long-liveAccessToken.pdf"),
 
             Text::make('Page Access Token', 'page_access_token')
-                ->hide()
-                ->hideFromIndex()
-                ->dependsOn(
-                    ['type'],
-                    function (Text $field, NovaRequest $request, FormData $formData) {
-                        if ($formData->type === ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK) {
-                            $field->show()->rules(['required'])->showOnDetail();
-                        }
+            ->hide()
+            ->hideFromIndex()
+            ->dependsOn(
+                ['type'],
+                function (Text $field, NovaRequest $request, FormData $formData) {
+                    if ($formData->type === ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK) {
+                        $field->show()->rules(['required'])->showOnDetail();
                     }
-                ),
-                
-            Select::make('Type', 'type')
-                ->options(EndpointHelper::getTypes())
-                ->displayUsingLabels()
-                ->rules('required')
-                ->filterable(),
+                }
+            ),
         ];
     }
 
