@@ -128,6 +128,7 @@ class EndpointHelperGoogle extends AbstractEndpointHelper
             'leadgen_id' => $transformedData['Leadid'],
             'transformed_data' => $connectionLogData,
             'status' => ConnectionLog::STATUS_PENDING,
+            'is_test' => 0,
         ]);
 
         Log::info('$connectionLog:' . $connectionLog);

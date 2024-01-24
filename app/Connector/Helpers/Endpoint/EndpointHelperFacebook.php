@@ -168,6 +168,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             'leadgen_id' => $leadGenId,
             'transformed_data' => $connectionLogData,
             'status' => $status,
+            'is_test' => 0,
         ]);
 
         return $connectionLog;
