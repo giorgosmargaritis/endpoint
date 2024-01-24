@@ -30,6 +30,7 @@ class ConnectionLog extends Model
         'leadgen_id',
         'transformed_data',
         'status',
+        'is_test',
     ];
 
     public function connectionlogattempts(): HasMany
