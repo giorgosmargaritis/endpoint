@@ -24,13 +24,11 @@ class ConnectionLog extends Resource
     public static $model = \App\Models\ConnectionLog::class;
 
     /**
-     * The click action to use when clicking on the resource in the table.
+     * The number of resources to show per page via relationships.
      *
-     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
-     *
-     * @var string
+     * @var int
      */
-    // public static $clickAction = 'ignore';
+    public static $perPageViaRelationship = 15;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
