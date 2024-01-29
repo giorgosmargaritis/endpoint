@@ -39,9 +39,9 @@ class RequestFacebookData extends Command
             //     Log::info('$connectionLog->connection: ' . $connectionLog->connection);
             // }
             // exit;
-            $endpoint = $logForRequestingData->connection->endpoint;
-            $connection = $logForRequestingData->connection;
-            $connectionLog = $logForRequestingData->connection->connectionslogs;
+            $endpoint = $logForRequestingData->log->connection->endpoint;
+            $connection = $logForRequestingData->log->connection;
+            $connectionLog = $logForRequestingData->log->connection->connectionslogs;
             $logID = $logForRequestingData->log->id;
             $logDataFacebook = $logForRequestingData;
             $dataReceived = $logDataFacebook->data_received;
