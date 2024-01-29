@@ -13,7 +13,6 @@ class ConnectionLogHelper
         return [
             ConnectionLog::STATUS_FAIL => 'FAIL',
             ConnectionLog::STATUS_SUCCESS => 'SUCCESS',
-            ConnectionLog::STATUS_PENDING => 'PENDING',
         ];
     }
     public static function getFacebookStatuses()
@@ -21,7 +20,6 @@ class ConnectionLogHelper
         return [
             ConnectionLog::STATUS_FAIL => 'FAIL',
             ConnectionLog::STATUS_SUCCESS => 'SUCCESS',
-            ConnectionLog::STATUS_PENDING => 'PENDING',
             ConnectionLog::STATUS_FAIL_FROM_FACEBOOK => 'FAIL FROM FACEBOOK',
         ];
     }
@@ -40,7 +38,6 @@ class ConnectionLogHelper
         //         return [
         //             ConnectionLog::STATUS_FAIL => 'FAIL',
         //             ConnectionLog::STATUS_SUCCESS => 'SUCCESS',
-        //             ConnectionLog::STATUS_PENDING => 'PENDING',
         //             ConnectionLog::STATUS_FAIL_FROM_FACEBOOK => 'FAIL FROM FACEBOOK',
         //         ];
         //         break;
@@ -49,7 +46,6 @@ class ConnectionLogHelper
         return [
             ConnectionLog::STATUS_FAIL => 'FAIL',
             ConnectionLog::STATUS_SUCCESS => 'SUCCESS',
-            ConnectionLog::STATUS_PENDING => 'PENDING',
             ConnectionLog::STATUS_FAIL_FROM_FACEBOOK => 'FAIL FROM FACEBOOK',
         ];
     }
