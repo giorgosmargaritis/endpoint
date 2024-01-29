@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\AuthenticationMethod;
+use App\Models\Role;
 
 class AuthenticationMethodPolicy
 {
@@ -28,7 +29,7 @@ class AuthenticationMethodPolicy
     public function view(User $user, AuthenticationMethod $model)
     {
         // Authorization logic for viewing a model
-        if($user->role->id === 1)
+        if($user->role->id === Role::ROLE_SUPERADMIN)
         {
             return true;
         }

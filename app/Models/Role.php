@@ -10,6 +10,8 @@ class Role extends Model
 {
     use HasFactory;
 
+    const ROLE_SUPERADMIN = 1;
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
