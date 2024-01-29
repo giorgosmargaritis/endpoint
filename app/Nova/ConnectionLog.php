@@ -78,7 +78,7 @@ class ConnectionLog extends Resource
                 }),
 
             Select::make('Status', 'status')
-                ->options(ConnectionLogHelper::getStatuses())
+                ->options(ConnectionLogHelper::getStatuses($this->model()))
                 ->displayUsingLabels()
                 ->exceptOnForms()
                 ->filterable(),
