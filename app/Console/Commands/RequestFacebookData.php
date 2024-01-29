@@ -36,7 +36,7 @@ class RequestFacebookData extends Command
             $connectionLogs = $logForRequestingData->log->connectionlogs;
             foreach($connectionLogs as $connectionLog)
             {
-                $endpoint = $connectionLog->endpoint;
+                $endpoint = $connectionLog->connection->endpoint;
                 $connection = $connectionLog->connection;
                 $logID = $logForRequestingData->log->id;
                 $logDataFacebook = $logForRequestingData;
