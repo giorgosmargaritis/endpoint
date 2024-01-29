@@ -34,7 +34,9 @@ class RequestFacebookData extends Command
         foreach($logsForRequestingData as $logForRequestingData)
         {
             Log::info('$logForRequestingData->log: ' . $logForRequestingData->log);
-            foreach($logForRequestingData->log->connectionlogs->toArray() as $connectionLog)
+            $connectionLogs = $logForRequestingData->log->connectionlogs;
+            Log::info($connectionLogs);
+            foreach($connectionLogs as $connectionLog)
             {
                 Log::info($connectionLog);
                 exit;
