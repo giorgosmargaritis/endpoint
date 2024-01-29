@@ -40,10 +40,20 @@ class RequestFacebookData extends Command
             }
             exit;
             $endpoint = $logForRequestingData->connection->endpoint;
-            $connection = $connectionLog->connection;
+            $connection = $logForRequestingData->connection;
             $logID = $connectionLog->log->id;
-            $logDataFacebook = LogDataFacebook::where('log_id', $logID)->first();
+            $logDataFacebook = $logForRequestingData;
             $dataReceived = $logDataFacebook->data_received;
+
+            $requestedData = $endpointHelperFacebook->requestData($endpoint, $dataReceived);
+
+            $requestedDataUpdated = $endpointHelperFacebook->updateRequestedData($requestedData, $logDataFacebook);
+
+            $transformedData = $endpointHelperFacebook->transformData($requestedDataUpdated, $logID);
+
+            $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
+
+            $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
         }
     }
 }
