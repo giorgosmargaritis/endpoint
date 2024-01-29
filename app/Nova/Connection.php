@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Models\ConnectionLog;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
@@ -94,7 +95,20 @@ class Connection extends Resource
     public function actions(NovaRequest $request)
     {
         return [
-            (new \App\Nova\Actions\RequestFacebookDataBatch),
+            (new \App\Nova\Actions\RequestFacebookDataBatch)
+            ->onlyOnDetail()
+            ->canSee(function ($request) {
+                $connectionLog = $this->model()->connectionlogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
+                if($connectionLog)
+                {
+                    return true;
+                }
+
+                return false;
+            })
+            ->canRun(function ($request) {
+                return true;
+            }),
             (new \App\Nova\Actions\SendEmail),
         ];
     }

@@ -146,6 +146,7 @@ class ConnectionLog extends Resource
     {
         return [
             (new \App\Nova\Actions\SendLog)
+                ->onlyOnDetail()
                 ->canSee(function ($request) {
                     if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
                     {
@@ -156,6 +157,7 @@ class ConnectionLog extends Resource
                     return true;
                 }),
             (new \App\Nova\Actions\RequestFacebookData)
+                ->onlyOnDetail()
                 ->canSee(function ($request) {
                     if($this->model()->status !== ModelsConnectionLog::STATUS_SUCCESS
                     && $this->model()->status !== ModelsConnectionLog::STATUS_FAIL
