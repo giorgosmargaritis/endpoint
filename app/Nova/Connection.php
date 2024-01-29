@@ -98,7 +98,7 @@ class Connection extends Resource
             (new \App\Nova\Actions\RequestFacebookDataBatch)
             ->onlyOnDetail()
             ->canSee(function ($request) {
-                $connectionLog = $this->model()->connectionlogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
+                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
                 if($connectionLog)
                 {
                     return true;
