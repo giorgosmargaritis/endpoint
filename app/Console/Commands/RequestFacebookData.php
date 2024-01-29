@@ -41,6 +41,7 @@ class RequestFacebookData extends Command
             // exit;
             $endpoint = $logForRequestingData->connection->endpoint;
             $connection = $logForRequestingData->connection;
+            $connectionLog = $logForRequestingData->connection->connectionslogs;
             $logID = $logForRequestingData->log->id;
             $logDataFacebook = $logForRequestingData;
             $dataReceived = $logDataFacebook->data_received;
