@@ -37,24 +37,23 @@ class RequestFacebookData extends Command
             foreach($logForRequestingData->log->connectionlogs->toArray() as $connectionLog)
             {
                 Log::info('$connectionLog->connection: ' . $connectionLog->connection);
+            
+                $endpoint = $logForRequestingData->log->connection->endpoint;
+                $connection = $logForRequestingData->log->connection;
+                $logID = $logForRequestingData->log->id;
+                $logDataFacebook = $logForRequestingData;
+                $dataReceived = $logDataFacebook->data_received;
+
+                $requestedData = $endpointHelperFacebook->requestData($endpoint, $dataReceived);
+
+                $requestedDataUpdated = $endpointHelperFacebook->updateRequestedData($requestedData, $logDataFacebook);
+
+                $transformedData = $endpointHelperFacebook->transformData($requestedDataUpdated, $logID);
+
+                $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
+
+                $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
             }
-            exit;
-            $endpoint = $logForRequestingData->log->connection->endpoint;
-            $connection = $logForRequestingData->log->connection;
-            $connectionLog = $logForRequestingData->log->connection->connectionslogs;
-            $logID = $logForRequestingData->log->id;
-            $logDataFacebook = $logForRequestingData;
-            $dataReceived = $logDataFacebook->data_received;
-
-            $requestedData = $endpointHelperFacebook->requestData($endpoint, $dataReceived);
-
-            $requestedDataUpdated = $endpointHelperFacebook->updateRequestedData($requestedData, $logDataFacebook);
-
-            $transformedData = $endpointHelperFacebook->transformData($requestedDataUpdated, $logID);
-
-            $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
-
-            $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
         }
     }
 }
