@@ -115,7 +115,7 @@ class Connection extends Resource
             (new \App\Nova\Actions\SendLogBatch)
             ->onlyOnDetail()
             ->canSee(function ($request) {
-                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_PENDING)->first();
+                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->first();
                 if($connectionLog)
                 {
                     return true;
