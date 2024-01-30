@@ -24,7 +24,7 @@ class LogPolicy
     public function view(User $user, Log $model)
     {
         // Authorization logic for viewing a model
-        if($user->role === Role::ROLE_SUPERADMIN)
+        if($user->role->id === Role::ROLE_SUPERADMIN)
         {
             return true;
         }
