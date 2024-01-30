@@ -29,7 +29,7 @@ class RequestFacebookDataBatch extends Action
     {
         $connection = $models->first();
         $endpoint = $connection->endpoint;
-        $connectionLogs = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK);
+        $connectionLogs = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->where('times_requested', '<', 10);
         $endpointHelperFacebook = new EndpointHelperFacebook();
 
         foreach($connectionLogs as $connectionLog)
