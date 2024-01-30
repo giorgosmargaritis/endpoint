@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use App\Connector\Helpers\LogDataFacebookHelper;
+use Laravel\Nova\Fields\Number;
 
 class LogDataFacebook extends Resource
 {
@@ -50,6 +51,8 @@ class LogDataFacebook extends Resource
             Select::make('Data Requested Status', 'data_requested_status')
                 ->options(LogDataFacebookHelper::getStatuses())
                 ->displayUsingLabels(),
+
+            Number::make('Times Requested', 'times_requested'),
 
             DateTime::make('Created At')
             ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),

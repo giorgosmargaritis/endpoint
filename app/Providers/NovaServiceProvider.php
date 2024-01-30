@@ -2,14 +2,15 @@
 
 namespace App\Providers;
 
+use App\Nova\Log;
 use App\Nova\User;
 use App\Nova\Endpoint;
 use App\Nova\Receiver;
 use Laravel\Nova\Nova;
+use App\Nova\Connection;
 use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuItem;
 use App\Nova\AuthenticationMethod;
-use App\Nova\Connection;
 use Laravel\Nova\Menu\MenuSection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
@@ -37,6 +38,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     MenuItem::resource(Endpoint::class),
                     MenuItem::resource(AuthenticationMethod::class),
                     MenuItem::resource(User::class),
+                    MenuItem::resource(Log::class),
                 ])
             ];
         });

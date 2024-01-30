@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Log;
+use App\Models\Role;
 use App\Models\User;
 
 class LogPolicy
@@ -23,7 +24,11 @@ class LogPolicy
     public function view(User $user, Log $model)
     {
         // Authorization logic for viewing a model
-        return true;
+        if($user->role === Role::ROLE_SUPERADMIN)
+        {
+            return true;
+        }
+        return false;
     }
 
     public function create(User $user)

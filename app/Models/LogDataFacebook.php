@@ -25,12 +25,8 @@ class LogDataFacebook extends Model
         'data_received',
         'data_requested',
         'data_requested_status',
+        'times_requested',
     ];
-
-    // protected $casts = [
-    //     'data_received' => 'array',
-    //     'data_requested' => 'array',
-    // ];
 
     public function log(): BelongsTo
     {

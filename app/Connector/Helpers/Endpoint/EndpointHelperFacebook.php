@@ -76,6 +76,7 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
             'data_received' => $logMessage,
             'data_requested' => $response,
             'data_requested_status' => $dataRequestedStatus,
+            'times_requested' => 1,
         ]);
 
         Log::info('Log Data Facebook Saved: ' . $log_data_facebook);
@@ -256,7 +257,8 @@ class EndpointHelperFacebook extends AbstractEndpointHelper
     public function updateRequestedData($dataRequested, $logDataFacebook)
     {
         $logDataFacebook->data_requested = $dataRequested;
-
+        $logDataFacebook->times_requested += 1;
+        
         $dataRequested = json_decode($dataRequested, true);
 
         if(array_key_exists('error', $dataRequested))
