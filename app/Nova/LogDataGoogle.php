@@ -18,6 +18,13 @@ class LogDataGoogle extends Resource
     public static $model = \App\Models\LogDataGoogle::class;
 
     /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = true;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -31,6 +38,7 @@ class LogDataGoogle extends Resource
      */
     public static $search = [
         'id',
+        'data_received',
     ];
 
     /**
@@ -42,13 +50,15 @@ class LogDataGoogle extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Data Received'),
+            Text::make('Data Received', 'data_received'),
 
             DateTime::make('Created At')
-            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : '')
+            ->filterable(),
 
             DateTime::make('Updated At')
-            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : '')
+            ->filterable(),
         ];
     }
 

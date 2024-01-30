@@ -20,6 +20,13 @@ class LogDataFacebook extends Resource
     public static $model = \App\Models\LogDataFacebook::class;
 
     /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = true;
+
+    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -33,6 +40,8 @@ class LogDataFacebook extends Resource
      */
     public static $search = [
         'id',
+        'data_received',
+        'data_requested',
     ];
 
     /**
@@ -50,15 +59,19 @@ class LogDataFacebook extends Resource
 
             Select::make('Data Requested Status', 'data_requested_status')
                 ->options(LogDataFacebookHelper::getStatuses())
-                ->displayUsingLabels(),
+                ->displayUsingLabels()
+                ->filterable(),
 
-            Number::make('Times Requested', 'times_requested'),
+            Number::make('Times Requested', 'times_requested')
+                ->filterable(),
 
             DateTime::make('Created At')
-            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : '')
+            ->filterable(),
 
             DateTime::make('Updated At')
-            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : ''),
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.datetime_format')) : '')
+            ->filterable(),
         ];
     }
 
