@@ -27,7 +27,7 @@ class SendLogBatch extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         $connection = $models->first();
-        $connectionLogs = $connection->connectionslogs->where('status', ConnectionLog::STATUS_PENDING);
+        $connectionLogs = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL);
 
         $headerUsername = $connection->receiver->auth_data['Username'];
         $headerPassword = $connection->receiver->auth_data['Password'];
