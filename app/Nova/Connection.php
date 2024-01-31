@@ -104,9 +104,10 @@ class Connection extends Resource
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
                 if($connectionLog)
                 {
+                    Log::info("I can run RequestFacebookDataBatch.");
                     return true;
                 }
-
+                Log::info("I can't run RequestFacebookDataBatch.");
                 return false;
             })
             ->canRun(function ($request) {
@@ -118,12 +119,14 @@ class Connection extends Resource
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->first();
                 if($connectionLog)
                 {
+                    Log::info("I can run SendLogBatch.");
                     return true;
                 }
-
+                Log::info("I can't run SendLogBatch.");
                 return false;
             })
             ->canRun(function ($request) {
+                Log::info("I can run SendLogBatch.");
                 return true;
             }),
             (new \App\Nova\Actions\SendEmail),
