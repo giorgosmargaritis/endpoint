@@ -108,7 +108,13 @@ class Connection extends Resource
                     Log::info("I can run RequestFacebookDataBatch.");
                     return true;
                 }
-                Log::info("I can't run RequestFacebookDataBatch.");
+
+                if(!$this->model())
+                {
+                    return true;
+                }
+
+                return false;
             })
             ->canRun(function ($request) {
                 return true;
