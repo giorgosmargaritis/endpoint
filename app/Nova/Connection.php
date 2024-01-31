@@ -102,6 +102,8 @@ class Connection extends Resource
             ->onlyOnDetail()
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
+
+                Log::info('$request->id' . $request->resourceId);
                 Log::info('From facebook data batch, $connectionLog: ' . $connectionLog);
                 if($connectionLog)
                 {
@@ -109,7 +111,7 @@ class Connection extends Resource
                     return true;
                 }
 
-                if(!$this->model())
+                if($request->resourceId === null)
                 {
                     Log::info("I can run RequestFacebookDataBatch from exception.");
                     return true;
