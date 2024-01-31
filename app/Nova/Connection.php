@@ -111,6 +111,7 @@ class Connection extends Resource
 
                 if(!$this->model())
                 {
+                    Log::info("I can run RequestFacebookDataBatch from exception.");
                     return true;
                 }
 
