@@ -34,10 +34,10 @@ class RequestFacebookDataBatch extends Action
 
         foreach($connectionLogs as $connectionLog)
         {
-            // if(!$connectionLog->log->log_data_facebook->times_requested < 10)
-            // {
-            //     continue;
-            // }
+            if(!($connectionLog->log->log_data_facebook->times_requested < 10))
+            {
+                continue;
+            }
 
             $logID = $connectionLog->log->id;
             $logDataFacebook = $connectionLog->log->log_data_facebook;
