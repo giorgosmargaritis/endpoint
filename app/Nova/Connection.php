@@ -103,17 +103,13 @@ class Connection extends Resource
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
 
-                Log::info('$request->id' . $request->resourceId);
-                Log::info('From facebook data batch, $connectionLog: ' . $connectionLog);
                 if($connectionLog)
                 {
-                    Log::info("I can run RequestFacebookDataBatch.");
                     return true;
                 }
 
                 if(!$request->resourceId)
                 {
-                    Log::info("I can run RequestFacebookDataBatch from exception.");
                     return true;
                 }
 
@@ -126,16 +122,20 @@ class Connection extends Resource
             ->onlyOnDetail()
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->first();
-                Log::info('From send log batch, $connectionLog: ' . $connectionLog);
+                
                 if($connectionLog)
                 {
-                    Log::info("I can run SendLogBatch.");
                     return true;
                 }
-                Log::info("I can't run SendLogBatch.");
+                
+                if(!$request->resourceId)
+                {
+                    return true;
+                }
+
+                return false;
             })
             ->canRun(function ($request) {
-                Log::info("I can run SendLogBatch.");
                 return true;
             }),
             (new \App\Nova\Actions\SendEmail),
