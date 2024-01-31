@@ -102,6 +102,7 @@ class Connection extends Resource
             ->onlyOnDetail()
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
+                Log::info('From facebook data batch, $connectionLog: ' . $connectionLog);
                 if($connectionLog)
                 {
                     Log::info("I can run RequestFacebookDataBatch.");
@@ -117,6 +118,7 @@ class Connection extends Resource
             ->onlyOnDetail()
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->first();
+                Log::info('From send log batch, $connectionLog: ' . $connectionLog);
                 if($connectionLog)
                 {
                     Log::info("I can run SendLogBatch.");
