@@ -101,7 +101,6 @@ class Connection extends Resource
             (new \App\Nova\Actions\RequestFacebookDataBatch)
             ->onlyOnDetail()
             ->canSee(function ($request) {
-                Log::info('$request' . $request);
                 $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)->first();
                 Log::info('From facebook data batch, $connectionLog: ' . $connectionLog);
                 if($connectionLog)
@@ -110,7 +109,6 @@ class Connection extends Resource
                     return true;
                 }
                 Log::info("I can't run RequestFacebookDataBatch.");
-                return false;
             })
             ->canRun(function ($request) {
                 return true;
@@ -126,7 +124,6 @@ class Connection extends Resource
                     return true;
                 }
                 Log::info("I can't run SendLogBatch.");
-                return false;
             })
             ->canRun(function ($request) {
                 Log::info("I can run SendLogBatch.");
