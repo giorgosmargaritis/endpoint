@@ -26,9 +26,7 @@ class SendEmail extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        foreach (['gmargaritis17@gmail.com', 'georgos.margaritis@gr.ey.com'] as $recipient) {
-            Mail::to($recipient)->send(new SendMail());
-        }
+        Mail::to('to@example.com')->send(new SendMail());
         return Action::message('Sent');
     }
 
