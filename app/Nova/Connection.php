@@ -124,7 +124,7 @@ class Connection extends Resource
             ->canSee(function ($request) {
                 $connectionLog = $this->model()->connectionslogs->where(function (Builder $query) {
                     $query->where('status', ConnectionLog::STATUS_PENDING)->orWhere('status', ConnectionLog::STATUS_FAIL);
-                })->first();
+                })->get();
                 
                 if($connectionLog)
                 {
