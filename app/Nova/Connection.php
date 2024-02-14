@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ConnectionLog;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Query\Builder;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -121,9 +122,9 @@ class Connection extends Resource
             (new \App\Nova\Actions\SendLogBatch)
             ->onlyOnDetail()
             ->canSee(function ($request) {
-                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->orWhere(function (Builder $query) {
-                    $query->where('status', ConnectionLog::STATUS_PENDING);
-                });
+                $connectionLog = $this->model()->connectionslogs->where(function (Builder $query) {
+                    $query->where('status', ConnectionLog::STATUS_PENDING)->orWhere('status', ConnectionLog::STATUS_FAIL);
+                })->first();
                 
                 if($connectionLog)
                 {
