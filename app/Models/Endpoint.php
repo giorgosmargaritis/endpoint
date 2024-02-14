@@ -25,6 +25,11 @@ class Endpoint extends Model
         'verification_token',
         'page_access_token',
         'type',
+        'page_access_token_expiration_date',
+    ];
+
+    protected $casts = [
+        'page_access_token_expiration_date' => 'datetime',
     ];
 
     /**

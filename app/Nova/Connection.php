@@ -121,7 +121,7 @@ class Connection extends Resource
             (new \App\Nova\Actions\SendLogBatch)
             ->onlyOnDetail()
             ->canSee(function ($request) {
-                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->first();
+                $connectionLog = $this->model()->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->orWhere('status', ConnectionLog::STATUS_PENDING)->first();
                 
                 if($connectionLog)
                 {
@@ -138,7 +138,6 @@ class Connection extends Resource
             ->canRun(function ($request) {
                 return true;
             }),
-            (new \App\Nova\Actions\SendEmail),
         ];
     }
 }

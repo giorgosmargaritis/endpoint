@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\FormData;
 use Laravel\Nova\Fields\MultiSelect;
 use App\Connector\Helpers\EndpointHelper;
 use App\Models\Endpoint as ModelsEndpoint;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\URL;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -96,16 +97,30 @@ class Endpoint extends Resource
             ->displayUsing(fn () => "Long-liveAccessToken.pdf"),
 
             Text::make('Page Access Token', 'page_access_token')
-            ->hide()
+            ->hide(function (NovaRequest $request, $resource) {
+                return $this->type !== ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK;
+            })
+            ->hideFromDetail(function (NovaRequest $request, $resource) {
+                return $this->type !== ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK;
+            })
             ->hideFromIndex()
             ->dependsOn(
                 ['type'],
                 function (Text $field, NovaRequest $request, FormData $formData) {
                     if ($formData->type === ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK) {
-                        $field->show()->rules(['required'])->showOnDetail();
+                        $field->show();
                     }
                 }
             ),
+
+            Date::make('Page Access Token Expiration Date', 'page_access_token_expiration_date')
+            ->displayUsing(fn ($value) => $value ? $value->format(config('connector.date_format')) : '')
+            ->hide()
+            ->hideFromIndex()
+            ->showOnDetail(function (NovaRequest $request, $resource) {
+                return $this->type === ModelsEndpoint::SOCIAL_MEDIA_TYPE_FACEBOOK;
+            })
+            ->readonly(),
         ];
     }
 

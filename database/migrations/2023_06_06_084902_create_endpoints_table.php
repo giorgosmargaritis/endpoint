@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('path')->unique();
             $table->string('verification_token', 20)->unique();
             $table->string('page_access_token')->nullable();
+            $table->dateTime('page_access_token_expiration_date')->nullable();
             $table->tinyInteger('type')->unsigned();
             $table->timestamps();
         });
