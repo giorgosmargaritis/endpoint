@@ -109,6 +109,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function register()
     {
         Nova::initialPath('/resources/connections');
+
+        $this->app->bind(
+            \Laravel\Nova\Http\Controllers\LoginController::class, 
+            \App\Http\Controllers\Nova\LoginController::class
+       );
     }
     
 }
