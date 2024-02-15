@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Connector\Helpers\Endpoint\AbstractEndpointHelper;
+use App\Connector\Helpers\ReceiverHelper;
 use App\Models\ConnectionLog;
 use App\Models\ConnectionLogAttempt;
 
@@ -65,7 +66,9 @@ class LeadController extends Controller
             
             $connectionLog = $endpointHelper->createConnectionLog($connection, $transformedData, $logId);
 
-            $endpointHelper->sendConnectionLog($connectionLog, $connection, $transformedData);
+            // $endpointHelper->sendConnectionLog($connectionLog, $connection, $transformedData);
+
+            $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver, $transformedData);
         }
 
         Log::info('--- Procedure finished ---');
