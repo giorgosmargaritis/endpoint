@@ -2,16 +2,17 @@
 
 namespace App\Nova\Actions;
 
-use App\Connector\Helpers\Endpoint\EndpointHelperFacebook;
-use App\Models\LogDataFacebook;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Models\LogDataFacebook;
+use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Connector\Helpers\ReceiverHelper;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use App\Connector\Helpers\Endpoint\EndpointHelperFacebook;
 
 class RequestFacebookData extends Action
 {
@@ -44,9 +45,9 @@ class RequestFacebookData extends Action
 
         $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
 
-        $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
+        $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver);
 
-        if($connectionSent)
+        if($sendConnectionLog)
         {
             return Action::message('Data requested and sent successfully!');
         }

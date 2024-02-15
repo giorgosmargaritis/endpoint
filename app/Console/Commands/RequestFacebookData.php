@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\LogDataFacebook;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Connector\Helpers\ReceiverHelper;
 use App\Connector\Helpers\Endpoint\EndpointHelperFacebook;
 
 class RequestFacebookData extends Command
@@ -50,7 +51,7 @@ class RequestFacebookData extends Command
 
                 $connectionLog = $endpointHelperFacebook->updateConnectionLog($connectionLog, $transformedData);
 
-                $connectionSent = $endpointHelperFacebook->sendConnectionLog($connectionLog, $connection, $transformedData);
+                $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver);
             }
         }
     }
