@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User as ModelsUser;
 use App\Nova\User;
 use App\Nova\Endpoint;
 use App\Nova\Receiver;
@@ -15,6 +16,7 @@ use App\Nova\LogDataGoogle;
 use Laravel\Nova\Menu\MenuSection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Log;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
@@ -73,9 +75,13 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            return in_array($user->email, [
-                //
-            ]);
+            $users = ModelsUser::get();
+            $userEmails = [];
+            foreach($users as $user)
+            {
+                $userEmails[] = $user->email;
+            }
+            return in_array($user->email, $userEmails);
         });
     }
 
