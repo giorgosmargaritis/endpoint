@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Models\Endpoint;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class EndpointObserver
 {

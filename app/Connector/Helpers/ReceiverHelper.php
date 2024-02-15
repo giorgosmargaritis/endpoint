@@ -20,7 +20,8 @@ class ReceiverHelper
         $httpHeaders = [];
         $transformedData = json_decode($connectionLog->transformed_data, true);
 
-        switch ($receiver->authenticationmethod->type) {
+        switch ($receiver->authenticationmethod->type)
+        {
             case AuthenticationMethod::TYPE_NOAUTH:
                 $response = Http::post($receiver->url, $transformedData);
                 break;
@@ -34,8 +35,6 @@ class ReceiverHelper
                 $response = Http::post($receiver->url, $transformedData);
                 break;
         }
-        
-        
 
         $connectionLogAttempt = ConnectionLogAttempt::create([
             'connections_logs_id' => $connectionLog->id,
