@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Models\Endpoint;
 use App\Models\Receiver;
 use App\Observers\EndpointObserver;
-use App\Observers\ReceiverOberver;
+use App\Observers\ReceiverObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,7 +30,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Endpoint::observe(EndpointObserver::class);
-        Receiver::observe(ReceiverOberver::class);
+        Receiver::observe(ReceiverObserver::class);
     }
 
     /**
