@@ -19,11 +19,11 @@ class ReceiverHelper
         
         $httpHeaders = [];
 
-        switch ($receiver->authenticationmethod) {
-            case AuthenticationMethod::TYPE_NOAUTH:
+        switch ((int)$receiver->authenticationmethod) {
+            case (int)AuthenticationMethod::TYPE_NOAUTH:
                 break;
             
-            case AuthenticationMethod::TYPE_HEADER:
+            case (int)AuthenticationMethod::TYPE_HEADER:
                 $httpHeaders = $receiver->auth_data;
                 break;
 
