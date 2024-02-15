@@ -67,20 +67,26 @@ class Receiver extends Resource
             BelongsTo::make('Authentication Method', 'authenticationmethod'),
 
             KeyValue::make('Auth Data', 'auth_data')
-                ->hide()
-                ->rules('json')
-                ->dependsOn(
-                    ['authenticationmethod'],
-                    function (KeyValue $field, NovaRequest $request, FormData $formData) {
-                        if($formData->authenticationmethod)
-                        {
-                            $authMethodType = AuthenticationMethod::find($formData->authenticationmethod)->type;
-                            if ($authMethodType !== AuthenticationMethod::TYPE_NOAUTH) {
-                                $field->show()->rules(['required']);
-                            }
+            ->rules('json')
+            ->hide(function (NovaRequest $request, $resource) {
+                return optional($this->authenticationmethod)->type === AuthenticationMethod::TYPE_NOAUTH;
+            })
+            ->hideFromDetail(function (NovaRequest $request, $resource) {
+                return optional($this->authenticationmethod)->type === AuthenticationMethod::TYPE_NOAUTH;
+            })
+            ->hideFromIndex()
+            ->dependsOn(
+                ['authenticationmethod'],
+                function (KeyValue $field, NovaRequest $request, FormData $formData) {
+                    if($formData->authenticationmethod)
+                    {
+                        $authMethodType = AuthenticationMethod::find($formData->authenticationmethod)->type;
+                        if ($authMethodType !== AuthenticationMethod::TYPE_NOAUTH) {
+                            $field->show()->rules(['required']);
                         }
                     }
-                ),
+                }
+            ),
         ];
     }
 
