@@ -6,7 +6,7 @@ use App\Models\AuthenticationMethod;
 use App\Models\Receiver;
 use Carbon\Carbon;
 
-class ReceiverOberver
+class ReceiverObserver
 {
     /**
      * Handle the Receiver "created" event.
