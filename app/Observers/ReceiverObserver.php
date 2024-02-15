@@ -32,6 +32,7 @@ class ReceiverObserver
         {
             Log::info('Here');
             $receiver->auth_data = null;
+            $receiver->saveQuietly();
         }
     }
 
