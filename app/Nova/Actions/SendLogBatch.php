@@ -28,8 +28,8 @@ class SendLogBatch extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         $connection = $models->first();
-        $connectionLogsFail = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL);
-        $connectionLogsPending = $connection->connectionslogs->where('status', ConnectionLog::STATUS_PENDING);
+        $connectionLogsFail = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL)->limit(1);
+        $connectionLogsPending = $connection->connectionslogs->where('status', ConnectionLog::STATUS_PENDING)->limit(1);
 
         foreach($connectionLogsFail as $connectionLogFail)
         {
