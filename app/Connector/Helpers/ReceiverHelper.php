@@ -18,7 +18,7 @@ class ReceiverHelper
         }
         
         $httpHeaders = [];
-        $transformedData = $connectionLog->transformed_data;
+        $transformedData = json_decode($connectionLog->transformed_data, true);
 
         switch ($receiver->authenticationmethod->type) {
             case AuthenticationMethod::TYPE_NOAUTH:
