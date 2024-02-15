@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\AuthenticationMethod;
 use App\Models\Receiver;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ReceiverObserver
 {
@@ -21,8 +22,15 @@ class ReceiverObserver
      */
     public function updated(Receiver $receiver): void
     {
-        if($receiver->authenticationmethod->type == AuthenticationMethod::TYPE_NOAUTH)
+        Log::info($receiver->authenticationmethod->type);
+        Log::info(AuthenticationMethod::TYPE_NOAUTH);
+        Log::info($receiver->authenticationmethod->type === AuthenticationMethod::TYPE_NOAUTH);
+        Log::info(($receiver->authenticationmethod->type) === AuthenticationMethod::TYPE_NOAUTH);
+        Log::info((($receiver->authenticationmethod->type) === AuthenticationMethod::TYPE_NOAUTH));
+
+        if(($receiver->authenticationmethod->type) === AuthenticationMethod::TYPE_NOAUTH)
         {
+            Log::info('Here');
             $receiver->auth_data = null;
         }
     }
