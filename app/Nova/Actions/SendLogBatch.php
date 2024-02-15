@@ -10,6 +10,7 @@ use App\Models\ConnectionLogAttempt;
 use Illuminate\Support\Facades\Http;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Connector\Helpers\ReceiverHelper;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -30,61 +31,14 @@ class SendLogBatch extends Action
         $connectionLogsFail = $connection->connectionslogs->where('status', ConnectionLog::STATUS_FAIL);
         $connectionLogsPending = $connection->connectionslogs->where('status', ConnectionLog::STATUS_PENDING);
 
-        $headerUsername = $connection->receiver->auth_data['Username'];
-        $headerPassword = $connection->receiver->auth_data['Password'];
-
         foreach($connectionLogsFail as $connectionLogFail)
         {
-            $response = Http::withHeaders([
-                'Username' => $headerUsername,
-                'Password' => $headerPassword,
-            ])->post($connection->receiver->url,
-                json_decode($connectionLogFail->transformed_data, true)
-            );
-
-            $connectionLogAttempt = ConnectionLogAttempt::create([
-                'connections_logs_id' => $connectionLogFail->id,
-                'status_code' => $response->status(),
-                'response' => $response
-            ]);
-            
-            if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
-            {
-                $connectionLogFail->status = ConnectionLog::STATUS_SUCCESS;
-            }
-            else
-            {
-                $connectionLogFail->status = ConnectionLog::STATUS_FAIL;
-            }
-
-            $connectionLogFail->saveQuietly();
+            ReceiverHelper::sendConnectionLog($connectionLogFail, $connection->receiver);
         }   
         
         foreach($connectionLogsPending as $connectionLogPending)
         {
-            $response = Http::withHeaders([
-                'Username' => $headerUsername,
-                'Password' => $headerPassword,
-            ])->post($connection->receiver->url,
-                json_decode($connectionLogPending->transformed_data, true)
-            );
-
-            $connectionLogAttempt = ConnectionLogAttempt::create([
-                'connections_logs_id' => $connectionLogPending->id,
-                'status_code' => $response->status(),
-                'response' => $response
-            ]);
-            
-            if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
-            {
-                $connectionLogPending->status = ConnectionLog::STATUS_SUCCESS;
-            }
-            else
-            {
-                $connectionLogPending->status = ConnectionLog::STATUS_FAIL;
-            }
-
-            $connectionLogPending->saveQuietly();
+            ReceiverHelper::sendConnectionLog($connectionLogPending, $connection->receiver);
         }
 
         return Action::message('Logs were sent successfully!');

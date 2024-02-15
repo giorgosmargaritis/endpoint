@@ -11,6 +11,7 @@ use App\Models\ConnectionLogAttempt;
 use Illuminate\Support\Facades\Http;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Connector\Helpers\ReceiverHelper;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -28,37 +29,16 @@ class SendLog extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         $connectionLog = $models->first();
+        $connection = $connectionLog->connection;
 
-        $headerUsername = $connectionLog->connection->receiver->auth_data['Username'];
-        $headerPassword = $connectionLog->connection->receiver->auth_data['Password'];
+        $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver);
 
-        $response = Http::withHeaders([
-            'Username' => $headerUsername,
-            'Password' => $headerPassword,
-        ])->post($connectionLog->connection->receiver->url,
-            json_decode($connectionLog->transformed_data, true)
-        );
-
-        $connectionLogAttempt = ConnectionLogAttempt::create([
-            'connections_logs_id' => $connectionLog->id,
-            'status_code' => $response->status(),
-            'response' => $response
-        ]);
-
-        Log::info($response->status());
-
-        if(in_array($response->status(), ConnectionLogAttempt::STATUS_SUCCESS))
+        if($sendConnectionLog)
         {
-            $connectionLog->status = ConnectionLog::STATUS_SUCCESS;
+            return Action::message('Log was sent successfully!');
         }
-        else
-        {
-            $connectionLog->status = ConnectionLog::STATUS_FAIL;
-        }
-
-        $connectionLog->saveQuietly();
-
-        return Action::message('Log was sent successfully!');
+        
+        return Action::danger('Log was not sent!');
     }
 
     /**

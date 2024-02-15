@@ -68,7 +68,7 @@ class LeadController extends Controller
 
             // $endpointHelper->sendConnectionLog($connectionLog, $connection, $transformedData);
 
-            $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver, $transformedData);
+            $sendConnectionLog = ReceiverHelper::sendConnectionLog($connectionLog, $connection->receiver);
         }
 
         Log::info('--- Procedure finished ---');

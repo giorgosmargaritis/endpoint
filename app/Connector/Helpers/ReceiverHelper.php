@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class ReceiverHelper
 {
-    public static function sendConnectionLog($connectionLog, $receiver, $transformedData)
+    public static function sendConnectionLog($connectionLog, $receiver)
     {
         if($connectionLog->status === ConnectionLog::STATUS_FAIL_FROM_FACEBOOK)
         {
@@ -18,6 +18,7 @@ class ReceiverHelper
         }
         
         $httpHeaders = [];
+        $transformedData = $connectionLog->transformed_data;
 
         switch ($receiver->authenticationmethod->type) {
             case AuthenticationMethod::TYPE_NOAUTH:
